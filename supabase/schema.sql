@@ -77,8 +77,7 @@ CREATE TABLE lots (
 
 -- 11. CLIENTES
 CREATE TABLE clients (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    dni TEXT UNIQUE NOT NULL,
+    dni TEXT PRIMARY KEY,
     names TEXT NOT NULL,
     phone TEXT,
     address TEXT,
@@ -96,7 +95,7 @@ CREATE TABLE clients (
 CREATE TABLE separations (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     lot_id UUID REFERENCES lots(id) ON DELETE CASCADE NOT NULL,
-    client_id UUID REFERENCES clients(id) ON DELETE CASCADE NOT NULL,
+    client_id TEXT REFERENCES clients(dni) ON DELETE CASCADE NOT NULL,
     amount NUMERIC(10, 2) NOT NULL,
     date DATE NOT NULL DEFAULT CURRENT_DATE,
     expiration_date DATE NOT NULL DEFAULT (CURRENT_DATE + INTERVAL '7 days'),
@@ -109,8 +108,8 @@ CREATE TABLE separations (
 CREATE TABLE sales (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     lot_id UUID REFERENCES lots(id) ON DELETE RESTRICT NOT NULL,
-    client_id UUID REFERENCES clients(id) ON DELETE RESTRICT NOT NULL,
-    co_client_id UUID REFERENCES clients(id) ON DELETE RESTRICT, -- ASOCJUNT (Co-propietario)
+    client_id TEXT REFERENCES clients(dni) ON DELETE RESTRICT NOT NULL,
+    co_client_id TEXT REFERENCES clients(dni) ON DELETE RESTRICT, -- ASOCJUNT (Co-propietario)
     total_sale_price NUMERIC(10, 2) NOT NULL,
     initial_amount_paid NUMERIC(10, 2) NOT NULL,
     installments_count INT NOT NULL, -- Ej: 48 meses
@@ -139,7 +138,7 @@ CREATE TABLE installments (
 CREATE TABLE daily_income (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     lot_id UUID REFERENCES lots(id) ON DELETE RESTRICT NOT NULL,
-    client_id UUID REFERENCES clients(id) ON DELETE RESTRICT NOT NULL,
+    client_id TEXT REFERENCES clients(dni) ON DELETE RESTRICT NOT NULL,
     sale_id UUID REFERENCES sales(id) ON DELETE CASCADE,
     separation_id UUID REFERENCES separations(id) ON DELETE SET NULL,
     installment_id UUID REFERENCES installments(id) ON DELETE SET NULL,

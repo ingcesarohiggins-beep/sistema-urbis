@@ -14,6 +14,7 @@ import GastosView from './components/GastosView';
 import ProjectsView from './components/ProjectsView';
 import CuentasView from './components/CuentasView';
 import ActivityLogView from './components/ActivityLogView';
+import ContratosView from './components/ContratosView';
 
 export default function App() {
   // ==========================================
@@ -365,6 +366,14 @@ export default function App() {
             👥 Ficha Clientes
           </button>
 
+          <button
+            className={`btn-secondary ${activeView === 'contratos' ? 'active-nav' : ''}`}
+            onClick={() => setActiveView('contratos')}
+            style={{ justifyContent: 'flex-start' }}
+          >
+            📄 Contratos
+          </button>
+
           {/* Secretary & Admin view payment form */}
           {currentRole !== 'manager' && (
             <button
@@ -493,6 +502,19 @@ export default function App() {
             supabase={supabase}
             session={session}
             clients={clients}
+            onRefreshData={handleRefreshData}
+          />
+        )}
+
+        {activeView === 'contratos' && (
+          <ContratosView
+            supabase={supabase}
+            session={session}
+            selectedProject={selectedProject}
+            lots={lots}
+            clients={clients}
+            sales={sales}
+            installments={installments}
             onRefreshData={handleRefreshData}
           />
         )}

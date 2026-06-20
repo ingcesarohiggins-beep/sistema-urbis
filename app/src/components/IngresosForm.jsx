@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { logActivity } from '../utils/activityLogger';
+import { fetchDniData } from '../utils/reniec';
 
 export default function IngresosForm({ supabase, session, selectedProject, lots, clients, financialAccounts, onRefreshData }) {
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,12 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
   const [newNames, setNewNames] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [newAddress, setNewAddress] = useState('');
+  const [newDepartment, setNewDepartment] = useState('UCAYALI');
+  const [newProvince, setNewProvince] = useState('CORONEL PORTILLO');
+  const [newDistrict, setNewDistrict] = useState('CALLERIA');
+  const [newCivilStatus, setNewCivilStatus] = useState('SOLTERO');
+  const [newNationality, setNewNationality] = useState('Peruana');
+  const [searchingNewDni, setSearchingNewDni] = useState(false);
 
   // Auto-set account id
   const projectAccounts = selectedProject
@@ -109,6 +116,46 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
     }
   };
 
+  const handleQueryNewDni = async () => {
+    if (!newDni || newDni.length !== 8) {
+      alert("Por favor, ingrese un DNI de 8 dígitos para consultar.");
+      return;
+    }
+    
+    setSearchingNewDni(true);
+    try {
+      const data = await fetchDniData(supabase, newDni);
+      setNewNames(data.names || '');
+      setNewAddress(data.address || '');
+      setNewDepartment(data.department || 'UCAYALI');
+      setNewProvince(data.province || 'CORONEL PORTILLO');
+      setNewDistrict(data.district || 'CALLERIA');
+      setNewNationality(data.nationality || 'Peruana');
+      
+      if (data.civil_status) {
+        const statusUpper = data.civil_status.toUpperCase();
+        if (statusUpper.includes('SOLTER')) setNewCivilStatus('SOLTERO');
+        else if (statusUpper.includes('CASAD')) setNewCivilStatus('CASADO');
+        else if (statusUpper.includes('DIVORCIAD')) setNewCivilStatus('DIVORCIADO');
+        else if (statusUpper.includes('VIUD')) setNewCivilStatus('VIUDO');
+        else setNewCivilStatus(statusUpper);
+      }
+      
+      if (data.phone) setNewPhone(data.phone);
+
+      if (data.isLocal) {
+        alert("Cliente encontrado en la base de datos local y autocompletado.");
+      } else {
+        alert("Datos obtenidos de RENIEC (Simulado) con éxito.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error al consultar DNI: " + err.message);
+    } finally {
+      setSearchingNewDni(false);
+    }
+  };
+
   const handleCreateClientInline = async (e) => {
     e.preventDefault();
     if (!newDni || !newNames) {
@@ -122,7 +169,12 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
         dni: newDni.trim(),
         names: newNames.trim(),
         phone: newPhone.trim(),
-        address: newAddress.trim()
+        address: newAddress.trim(),
+        department: newDepartment,
+        province: newProvince,
+        district: newDistrict,
+        civil_status: newCivilStatus,
+        nationality: newNationality
       });
 
       if (error) throw error;
@@ -145,6 +197,11 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
       setNewNames('');
       setNewPhone('');
       setNewAddress('');
+      setNewDepartment('UCAYALI');
+      setNewProvince('CORONEL PORTILLO');
+      setNewDistrict('CALLERIA');
+      setNewCivilStatus('SOLTERO');
+      setNewNationality('Peruana');
       
       if (onRefreshData) onRefreshData();
     } catch (err) {
@@ -655,13 +712,31 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
       {/* Inline Client creation modal */}
       {showClientModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 110, backdropFilter: 'blur(4px)' }}>
-          <div className="glass-panel" style={{ width: '450px', padding: '32px' }}>
+          <div className="glass-panel" style={{ width: '480px', padding: '32px' }}>
             <h3 style={{ margin: '0 0 20px 0', fontFamily: 'Outfit' }}>Registrar Cliente Inline</h3>
             <form onSubmit={handleCreateClientInline} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               
               <div className="form-group">
                 <label>DOCUMENTO DE IDENTIDAD (DNI) *</label>
-                <input type="text" maxLength={15} value={newDni} onChange={(e) => setNewDni(e.target.value)} required />
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input 
+                    type="text" 
+                    maxLength={8} 
+                    value={newDni} 
+                    onChange={(e) => setNewDni(e.target.value.replace(/\D/g, ''))} 
+                    required 
+                    style={{ flexGrow: 1 }}
+                  />
+                  <button 
+                    type="button" 
+                    className="btn-secondary" 
+                    onClick={handleQueryNewDni} 
+                    disabled={searchingNewDni || !newDni || newDni.length !== 8}
+                    style={{ padding: '0 12px', fontSize: '0.75rem', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    {searchingNewDni ? <div className="loading-spinner" style={{ width: '14px', height: '14px', borderWidth: '2px', borderStyle: 'solid', borderColor: 'var(--primary) transparent transparent transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div> : '🔍 Consultar'}
+                  </button>
+                </div>
               </div>
 
               <div className="form-group">
@@ -679,12 +754,28 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
                 <input type="text" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} />
               </div>
 
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div className="form-group">
+                  <label>ESTADO CIVIL</label>
+                  <select value={newCivilStatus} onChange={(e) => setNewCivilStatus(e.target.value)}>
+                    <option value="SOLTERO">SOLTERO(A)</option>
+                    <option value="CASADO">CASADO(A)</option>
+                    <option value="DIVORCIADO">DIVORCIADO(A)</option>
+                    <option value="VIUDO">VIUDO(A)</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>NACIONALIDAD *</label>
+                  <input type="text" value={newNationality} onChange={(e) => setNewNationality(e.target.value)} required />
+                </div>
+              </div>
+
               <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
                 <button type="button" className="btn-secondary" onClick={() => setShowClientModal(false)} style={{ flexGrow: 1 }} disabled={loading}>
                   Cancelar
                 </button>
                 <button type="submit" className="btn-primary" style={{ flexGrow: 1 }} disabled={loading}>
-                  {loading ? 'Creando...' : 'Crear e Inserir'}
+                  {loading ? 'Creando...' : 'Crear y Asignar'}
                 </button>
               </div>
             </form>

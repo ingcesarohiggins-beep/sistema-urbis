@@ -17,7 +17,25 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
   const [titularName, setTitularName] = useState('');
   const [titularDni, setTitularDni] = useState('');
   const [titularAddress, setTitularAddress] = useState('');
+  const [titularNationality, setTitularNationality] = useState('Peruana');
+  const [titularCivilStatus, setTitularCivilStatus] = useState('Soltera');
+  const [titularPhone, setTitularPhone] = useState('');
+  const [titularEmail, setTitularEmail] = useState('');
+  const [titularOfficeAddress, setTitularOfficeAddress] = useState('');
+  const [bankName, setBankName] = useState('');
+  const [bankAccount, setBankAccount] = useState('');
+  const [bankCci, setBankCci] = useState('');
+  const [predioName, setPredioName] = useState('');
+  const [predioUucc, setPredioUucc] = useState('');
+  const [predioArea, setPredioArea] = useState('');
+  const [predioDistrict, setPredioDistrict] = useState('');
+  const [predioPartida, setPredioPartida] = useState('');
+  const [predioZonaRegistral, setPredioZonaRegistral] = useState('');
+  const [latePenaltyRate, setLatePenaltyRate] = useState('1.50');
   const [contractTemplate, setContractTemplate] = useState('');
+  
+  // UI States
+  const [expandedProjectId, setExpandedProjectId] = useState(null);
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -43,6 +61,21 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
     setTitularName('');
     setTitularDni('');
     setTitularAddress('');
+    setTitularNationality('Peruana');
+    setTitularCivilStatus('Soltera');
+    setTitularPhone('');
+    setTitularEmail('');
+    setTitularOfficeAddress('');
+    setBankName('');
+    setBankAccount('');
+    setBankCci('');
+    setPredioName('');
+    setPredioUucc('');
+    setPredioArea('');
+    setPredioDistrict('');
+    setPredioPartida('');
+    setPredioZonaRegistral('');
+    setLatePenaltyRate('1.50');
     setContractTemplate('');
     setShowModal(true);
   };
@@ -58,6 +91,21 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
     setTitularName(project.titular_name || '');
     setTitularDni(project.titular_dni || '');
     setTitularAddress(project.titular_address || '');
+    setTitularNationality(project.titular_nationality || 'Peruana');
+    setTitularCivilStatus(project.titular_civil_status || 'Soltera');
+    setTitularPhone(project.titular_phone || '');
+    setTitularEmail(project.titular_email || '');
+    setTitularOfficeAddress(project.titular_office_address || '');
+    setBankName(project.bank_name || '');
+    setBankAccount(project.bank_account || '');
+    setBankCci(project.bank_cci || '');
+    setPredioName(project.predio_name || '');
+    setPredioUucc(project.predio_uucc || '');
+    setPredioArea(project.predio_area || '');
+    setPredioDistrict(project.predio_district || '');
+    setPredioPartida(project.predio_partida || '');
+    setPredioZonaRegistral(project.predio_zona_registral || '');
+    setLatePenaltyRate(project.late_penalty_rate || '1.50');
     setContractTemplate(project.contract_template || '');
     setShowModal(true);
   };
@@ -105,6 +153,21 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
         titular_name: titularName,
         titular_dni: titularDni,
         titular_address: titularAddress,
+        titular_nationality: titularNationality,
+        titular_civil_status: titularCivilStatus,
+        titular_phone: titularPhone,
+        titular_email: titularEmail,
+        titular_office_address: titularOfficeAddress,
+        bank_name: bankName,
+        bank_account: bankAccount,
+        bank_cci: bankCci,
+        predio_name: predioName,
+        predio_uucc: predioUucc,
+        predio_area: predioArea,
+        predio_district: predioDistrict,
+        predio_partida: predioPartida,
+        predio_zona_registral: predioZonaRegistral,
+        late_penalty_rate: parseFloat(latePenaltyRate) || 1.50,
         contract_template: contractTemplate,
       };
 
@@ -226,10 +289,40 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
               <h3 style={{ margin: 0, fontSize: '1.25rem', fontFamily: 'Outfit' }}>{project.name}</h3>
               
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <div><strong>Titular:</strong> {project.titular_name}</div>
+                <div><strong>Titular Vendedor:</strong> {project.titular_name}</div>
                 <div><strong>DNI Titular:</strong> {project.titular_dni}</div>
                 <div><strong>Ubicación:</strong> {project.latitude && project.longitude ? `${project.latitude}, ${project.longitude}` : 'No configurada'}</div>
               </div>
+
+              <button 
+                className="btn-secondary" 
+                onClick={() => setExpandedProjectId(expandedProjectId === project.id ? null : project.id)}
+                style={{ width: '100%', margin: '4px 0', fontSize: '0.75rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}
+              >
+                {expandedProjectId === project.id ? '🔼 Ocultar Ficha' : '🔽 Ver Ficha Técnica'}
+              </button>
+
+              {expandedProjectId === project.id && (
+                <div style={{ padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', fontSize: '0.75rem', display: 'flex', flexDirection: 'column', gap: '4px', border: '1px solid var(--border-color)' }}>
+                  <div><strong>Nacionalidad:</strong> {project.titular_nationality || 'Peruana'}</div>
+                  <div><strong>Estado Civil:</strong> {project.titular_civil_status || 'Soltera'}</div>
+                  <div><strong>Teléfono:</strong> {project.titular_phone || '-'}</div>
+                  <div><strong>Correo:</strong> {project.titular_email || '-'}</div>
+                  <div><strong>Oficina:</strong> {project.titular_office_address || '-'}</div>
+                  <div style={{ margin: '4px 0', borderTop: '1px dashed var(--border-color)' }}></div>
+                  <div><strong>Banco:</strong> {project.bank_name || '-'}</div>
+                  <div><strong>Cuenta:</strong> {project.bank_account || '-'}</div>
+                  <div><strong>CCI:</strong> {project.bank_cci || '-'}</div>
+                  <div style={{ margin: '4px 0', borderTop: '1px dashed var(--border-color)' }}></div>
+                  <div><strong>Predio:</strong> {project.predio_name || '-'}</div>
+                  <div><strong>UU.CC:</strong> {project.predio_uucc || '-'}</div>
+                  <div><strong>Área Predio:</strong> {project.predio_area || '-'}</div>
+                  <div><strong>Distrito Predio:</strong> {project.predio_district || '-'}</div>
+                  <div><strong>Partida:</strong> {project.predio_partida || '-'}</div>
+                  <div><strong>Zona Registral:</strong> {project.predio_zona_registral || '-'}</div>
+                  <div><strong>Mora Diaria:</strong> S/. {project.late_penalty_rate || '1.50'}</div>
+                </div>
+              )}
 
               <div style={{ display: 'flex', gap: '8px', marginTop: 'auto', paddingTop: '12px', borderTop: '1px solid var(--border-color)' }}>
                 {project.info_url && (
@@ -281,7 +374,7 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
                 <input type="url" value={infoUrl} onChange={(e) => setInfoUrl(e.target.value)} placeholder="https://drive.google.com/..." />
               </div>
 
-              <h4 style={{ margin: '8px 0 4px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px' }}>Datos del Titular</h4>
+              <h4 style={{ margin: '8px 0 4px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px', color: 'var(--primary)' }}>Datos del Titular / Vendedor</h4>
               
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
                 <div className="form-group">
@@ -294,14 +387,93 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
                 </div>
               </div>
 
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div className="form-group">
+                  <label>NACIONALIDAD *</label>
+                  <input type="text" value={titularNationality} onChange={(e) => setTitularNationality(e.target.value)} required />
+                </div>
+                <div className="form-group">
+                  <label>ESTADO CIVIL *</label>
+                  <input type="text" value={titularCivilStatus} onChange={(e) => setTitularCivilStatus(e.target.value)} required />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div className="form-group">
+                  <label>TELÉFONO DE CONTACTO</label>
+                  <input type="text" value={titularPhone} onChange={(e) => setTitularPhone(e.target.value)} placeholder="975920721" />
+                </div>
+                <div className="form-group">
+                  <label>CORREO DE CONTACTO</label>
+                  <input type="email" value={titularEmail} onChange={(e) => setTitularEmail(e.target.value)} placeholder="vendedor@urbis.com" />
+                </div>
+              </div>
+
               <div className="form-group">
-                <label>DIRECCIÓN DEL TITULAR *</label>
+                <label>DIRECCIÓN DEL TITULAR (DOMICILIO) *</label>
                 <input type="text" value={titularAddress} onChange={(e) => setTitularAddress(e.target.value)} required />
               </div>
 
               <div className="form-group">
+                <label>DIRECCIÓN DE LA OFICINA DE ATENCIÓN</label>
+                <input type="text" value={titularOfficeAddress} onChange={(e) => setTitularOfficeAddress(e.target.value)} placeholder="Jr. Augusto B. Leguía #482" />
+              </div>
+
+              <h4 style={{ margin: '8px 0 4px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px', color: 'var(--primary)' }}>Cuentas de Depósito (Contrato)</h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+                <div className="form-group">
+                  <label>BANCO</label>
+                  <input type="text" value={bankName} onChange={(e) => setBankName(e.target.value)} placeholder="BBVA Continental" />
+                </div>
+                <div className="form-group">
+                  <label>N° CUENTA</label>
+                  <input type="text" value={bankAccount} onChange={(e) => setBankAccount(e.target.value)} placeholder="0011-0306-0201..." />
+                </div>
+                <div className="form-group">
+                  <label>CÓDIGO INTERBANCARIO (CCI)</label>
+                  <input type="text" value={bankCci} onChange={(e) => setBankCci(e.target.value)} placeholder="011-306-000..." />
+                </div>
+              </div>
+
+              <h4 style={{ margin: '8px 0 4px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px', color: 'var(--primary)' }}>Detalles del Predio Matriz</h4>
+              <div className="form-group">
+                <label>NOMBRE DEL PREDIO</label>
+                <input type="text" value={predioName} onChange={(e) => setPredioName(e.target.value)} placeholder="PREDIO FINCA NATALIA SECTOR CASHIBO COCHA" />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+                <div className="form-group">
+                  <label>UU.CC.</label>
+                  <input type="text" value={predioUucc} onChange={(e) => setPredioUucc(e.target.value)} placeholder="037936" />
+                </div>
+                <div className="form-group">
+                  <label>ÁREA TOTAL PREDIO</label>
+                  <input type="text" value={predioArea} onChange={(e) => setPredioArea(e.target.value)} placeholder="Ha. 8.2544 HA" />
+                </div>
+                <div className="form-group">
+                  <label>DISTRITO PREDIO</label>
+                  <input type="text" value={predioDistrict} onChange={(e) => setPredioDistrict(e.target.value)} placeholder="Yarinacocha" />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div className="form-group">
+                  <label>PARTIDA REGISTRAL</label>
+                  <input type="text" value={predioPartida} onChange={(e) => setPredioPartida(e.target.value)} placeholder="11139962" />
+                </div>
+                <div className="form-group">
+                  <label>ZONA REGISTRAL</label>
+                  <input type="text" value={predioZonaRegistral} onChange={(e) => setPredioZonaRegistral(e.target.value)} placeholder="Zona Registral N.º VI Sede Pucallpa" />
+                </div>
+              </div>
+
+              <h4 style={{ margin: '8px 0 4px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px', color: 'var(--primary)' }}>Condiciones y Mora</h4>
+              <div className="form-group">
+                <label>PENALIDAD POR DÍA DE MORA (S/.) *</label>
+                <input type="number" step="0.01" value={latePenaltyRate} onChange={(e) => setLatePenaltyRate(e.target.value)} required />
+              </div>
+
+              <div className="form-group">
                 <label>PLANTILLA DE CONTRATO (TEXTO / MARKDOWN)</label>
-                <textarea rows={6} value={contractTemplate} onChange={(e) => setContractTemplate(e.target.value)} placeholder="Por el presente contrato, el titular {{titular_nombre}} vende al cliente {{cliente_nombre}} el lote {{lote}} mz {{manzana}}..." />
+                <textarea rows={6} value={contractTemplate} onChange={(e) => setContractTemplate(e.target.value)} placeholder="Por el presente contrato, el titular {{titular_nombre}} vende al cliente {{cliente_nombre}} el lote {{lote}}..." />
               </div>
 
               <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { logActivity } from '../utils/activityLogger';
-import { fetchDniData } from '../utils/reniec';
 
 export default function IngresosForm({ supabase, session, selectedProject, lots, clients, financialAccounts, onRefreshData }) {
   const [loading, setLoading] = useState(false);
@@ -34,7 +33,7 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
   const [newDistrict, setNewDistrict] = useState('CALLERIA');
   const [newCivilStatus, setNewCivilStatus] = useState('SOLTERO');
   const [newNationality, setNewNationality] = useState('Peruana');
-  const [searchingNewDni, setSearchingNewDni] = useState(false);
+
 
   // Auto-set account id
   const projectAccounts = selectedProject
@@ -116,45 +115,7 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
     }
   };
 
-  const handleQueryNewDni = async () => {
-    if (!newDni || newDni.length !== 8) {
-      alert("Por favor, ingrese un DNI de 8 dígitos para consultar.");
-      return;
-    }
-    
-    setSearchingNewDni(true);
-    try {
-      const data = await fetchDniData(supabase, newDni);
-      setNewNames(data.names || '');
-      setNewAddress(data.address || '');
-      setNewDepartment(data.department || 'UCAYALI');
-      setNewProvince(data.province || 'CORONEL PORTILLO');
-      setNewDistrict(data.district || 'CALLERIA');
-      setNewNationality(data.nationality || 'Peruana');
-      
-      if (data.civil_status) {
-        const statusUpper = data.civil_status.toUpperCase();
-        if (statusUpper.includes('SOLTER')) setNewCivilStatus('SOLTERO');
-        else if (statusUpper.includes('CASAD')) setNewCivilStatus('CASADO');
-        else if (statusUpper.includes('DIVORCIAD')) setNewCivilStatus('DIVORCIADO');
-        else if (statusUpper.includes('VIUD')) setNewCivilStatus('VIUDO');
-        else setNewCivilStatus(statusUpper);
-      }
-      
-      if (data.phone) setNewPhone(data.phone);
 
-      if (data.isLocal) {
-        alert("Cliente encontrado en la base de datos local y autocompletado.");
-      } else {
-        alert("Datos obtenidos de RENIEC (Simulado) con éxito.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error al consultar DNI: " + err.message);
-    } finally {
-      setSearchingNewDni(false);
-    }
-  };
 
   const handleCreateClientInline = async (e) => {
     e.preventDefault();
@@ -718,25 +679,13 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
               
               <div className="form-group">
                 <label>DOCUMENTO DE IDENTIDAD (DNI) *</label>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <input 
-                    type="text" 
-                    maxLength={8} 
-                    value={newDni} 
-                    onChange={(e) => setNewDni(e.target.value.replace(/\D/g, ''))} 
-                    required 
-                    style={{ flexGrow: 1 }}
-                  />
-                  <button 
-                    type="button" 
-                    className="btn-secondary" 
-                    onClick={handleQueryNewDni} 
-                    disabled={searchingNewDni || !newDni || newDni.length !== 8}
-                    style={{ padding: '0 12px', fontSize: '0.75rem', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                  >
-                    {searchingNewDni ? <div className="loading-spinner" style={{ width: '14px', height: '14px', borderWidth: '2px', borderStyle: 'solid', borderColor: 'var(--primary) transparent transparent transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div> : '🔍 Consultar'}
-                  </button>
-                </div>
+                <input 
+                  type="text" 
+                  maxLength={8} 
+                  value={newDni} 
+                  onChange={(e) => setNewDni(e.target.value.replace(/\D/g, ''))} 
+                  required 
+                />
               </div>
 
               <div className="form-group">

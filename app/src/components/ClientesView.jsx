@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { logActivity } from '../utils/activityLogger';
-import { fetchDniData } from '../utils/reniec';
 
 export default function ClientesView({ supabase, session, clients, onRefreshData }) {
   const [showModal, setShowModal] = useState(false);
@@ -20,8 +19,7 @@ export default function ClientesView({ supabase, session, clients, onRefreshData
   const [nationality, setNationality] = useState('Peruana');
   const [obs, setObs] = useState('');
 
-  // UI State
-  const [searchingDni, setSearchingDni] = useState(false);
+
 
   // DNI Files
   const [dniFrontFile, setDniFrontFile] = useState(null);
@@ -79,46 +77,7 @@ export default function ClientesView({ supabase, session, clients, onRefreshData
     }
   };
 
-  const handleQueryDni = async () => {
-    if (!dni || dni.length !== 8) {
-      alert("Por favor, ingrese un DNI de 8 dígitos para consultar.");
-      return;
-    }
-    
-    setSearchingDni(true);
-    try {
-      const data = await fetchDniData(supabase, dni);
-      setNames(data.names || '');
-      setAddress(data.address || '');
-      setDepartment(data.department || 'UCAYALI');
-      setProvince(data.province || 'CORONEL PORTILLO');
-      setDistrict(data.district || 'CALLERIA');
-      
-      if (data.civil_status) {
-        const statusUpper = data.civil_status.toUpperCase();
-        if (statusUpper.includes('SOLTER')) setCivilStatus('SOLTERO');
-        else if (statusUpper.includes('CASAD')) setCivilStatus('CASADO');
-        else if (statusUpper.includes('DIVORCIAD')) setCivilStatus('DIVORCIADO');
-        else if (statusUpper.includes('VIUD')) setCivilStatus('VIUDO');
-        else setCivilStatus(statusUpper);
-      }
-      
-      setNationality(data.nationality || 'Peruana');
-      
-      if (data.phone) setPhone(data.phone);
 
-      if (data.isLocal) {
-        alert("Cliente encontrado en la base de datos local y autocompletado.");
-      } else {
-        alert("Datos obtenidos de RENIEC (Simulado) con éxito.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error al consultar DNI: " + err.message);
-    } finally {
-      setSearchingDni(false);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -270,28 +229,14 @@ export default function ClientesView({ supabase, session, clients, onRefreshData
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div className="form-group">
                   <label>DOCUMENTO DE IDENTIDAD (DNI) *</label>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <input 
-                      type="text" 
-                      maxLength={8} 
-                      value={dni} 
-                      onChange={(e) => setDni(e.target.value.replace(/\D/g, ''))} 
-                      required 
-                      disabled={!!editingClient} 
-                      style={{ flexGrow: 1 }}
-                    />
-                    {!editingClient && (
-                      <button 
-                        type="button" 
-                        className="btn-secondary" 
-                        onClick={handleQueryDni} 
-                        disabled={searchingDni || !dni || dni.length !== 8}
-                        style={{ padding: '0 12px', fontSize: '0.75rem', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      >
-                        {searchingDni ? <div className="loading-spinner" style={{ width: '14px', height: '14px', borderWidth: '2px', borderStyle: 'solid', borderColor: 'var(--primary) transparent transparent transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div> : '🔍 Consultar'}
-                      </button>
-                    )}
-                  </div>
+                  <input 
+                    type="text" 
+                    maxLength={8} 
+                    value={dni} 
+                    onChange={(e) => setDni(e.target.value.replace(/\D/g, ''))} 
+                    required 
+                    disabled={!!editingClient} 
+                  />
                 </div>
                 <div className="form-group">
                   <label>CELULAR</label>

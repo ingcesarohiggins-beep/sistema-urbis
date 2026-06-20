@@ -1678,8 +1678,13 @@ INSERT INTO installments (sale_id, installment_number, due_date, amount, amount_
 VALUES ('00000000-0000-0000-0000-006500000006', 50, '2025-01-01', 0, 0, 'pendiente');
 
 
+INSERT INTO clients (dni, names, phone, district, province, department)
+VALUES ('GEN-89203578', 'DORELY ROSA MENDIZABAL CALIXTO', '51920475686', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
+ON CONFLICT (dni) DO NOTHING;
+
+
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-006600000003', '48343379', 43500, 1000, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-006600000003', 'GEN-89203578', 43500, 1000, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -1892,7 +1897,7 @@ VALUES ('00000000-0000-0000-0000-006600000003', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-006700000003', '6115804', 37500, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-006700000003', '06115804', 37500, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -2105,7 +2110,7 @@ VALUES ('00000000-0000-0000-0000-006700000003', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-006700000004', '6115804', 37500, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-006700000004', '06115804', 37500, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -2743,8 +2748,13 @@ INSERT INTO installments (sale_id, installment_number, due_date, amount, amount_
 VALUES ('00000000-0000-0000-0000-007100000003', 50, '2025-01-01', 0, 0, 'pendiente');
 
 
+INSERT INTO clients (dni, names, phone, district, province, department)
+VALUES ('GEN-09795609', 'YAZMIN ATUANETH AYALA BASILIO', '51952527411', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
+ON CONFLICT (dni) DO NOTHING;
+
+
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-007100000004', 'expropiado', 23100, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-007100000004', 'GEN-09795609', 23100, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -5939,12 +5949,12 @@ VALUES ('00000000-0000-0000-0000-007200000012', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO clients (dni, names, phone, district, province, department)
-VALUES ('GEN-96352596', 'CRISTHIAN FERNANDO RUIZ SEMINARIO', '51988605281', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
+VALUES ('GEN-08662810', 'CRISTHIAN FERNANDO RUIZ SEMINARIO', '51988605281', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
 ON CONFLICT (dni) DO NOTHING;
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-007300000004', 'GEN-96352596', 19500, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-007300000004', 'GEN-08662810', 19500, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -6157,7 +6167,7 @@ VALUES ('00000000-0000-0000-0000-007300000004', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-007300000005', 'GEN-96352596', 16500, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-007300000005', 'GEN-08662810', 16500, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -6583,12 +6593,12 @@ VALUES ('00000000-0000-0000-0000-007300000006', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO clients (dni, names, phone, district, province, department)
-VALUES ('GEN-29277447', 'BARBARA MELO & ALVARO GUILLERMO DAVILA ESCOBAR', '51903210496', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
+VALUES ('GEN-35368668', 'BARBARA MELO & ALVARO GUILLERMO DAVILA ESCOBAR', '51903210496', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
 ON CONFLICT (dni) DO NOTHING;
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-007300000007', 'GEN-29277447', 16500, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-007300000007', 'GEN-35368668', 16500, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -8079,12 +8089,12 @@ VALUES ('00000000-0000-0000-0000-007400000004', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO clients (dni, names, phone, district, province, department)
-VALUES ('GEN-96721783', 'MARTIN MIGUEL CENTURION GUARDIA', '13106222625', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
+VALUES ('GEN-97221779', 'MARTIN MIGUEL CENTURION GUARDIA', '13106222625', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
 ON CONFLICT (dni) DO NOTHING;
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-007400000005', 'GEN-96721783', 16500, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-007400000005', 'GEN-97221779', 16500, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -8297,7 +8307,7 @@ VALUES ('00000000-0000-0000-0000-007400000005', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-007400000006', 'GEN-96721783', 16500, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-007400000006', 'GEN-97221779', 16500, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -9358,12 +9368,12 @@ VALUES ('00000000-0000-0000-0000-007600000002', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO clients (dni, names, phone, district, province, department)
-VALUES ('GEN-10857721', 'ELEVI FERNANDEZ DELGADO', '51961396533', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
+VALUES ('GEN-98024285', 'ELEVI FERNANDEZ DELGADO', '51961396533', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
 ON CONFLICT (dni) DO NOTHING;
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007600000003', '00000000-0000-0000-0000-007600000003', 'GEN-10857721', 20100, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-007600000003', '00000000-0000-0000-0000-007600000003', 'GEN-98024285', 20100, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -9576,7 +9586,7 @@ VALUES ('00000000-0000-0000-0000-007600000003', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007600000004', '00000000-0000-0000-0000-007600000004', 'GEN-10857721', 20100, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-007600000004', '00000000-0000-0000-0000-007600000004', 'GEN-98024285', 20100, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -9789,7 +9799,7 @@ VALUES ('00000000-0000-0000-0000-007600000004', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007600000005', '00000000-0000-0000-0000-007600000005', 'GEN-10857721', 20100, 500, 48, 'en_proceso')
+VALUES ('00000000-0000-0000-0000-007600000005', '00000000-0000-0000-0000-007600000005', 'GEN-98024285', 20100, 500, 48, 'en_proceso')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -10002,7 +10012,7 @@ VALUES ('00000000-0000-0000-0000-007600000005', 50, '2025-01-01', 0, 0, 'pendien
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-007100000004', 'expropiado', 23100, 500, 48, 'expropiado')
+VALUES ('00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-007100000004', 'GEN-09795609', 23100, 500, 48, 'expropiado')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -10207,7 +10217,7 @@ VALUES ('00000000-0000-0000-0000-007100000004', 48, '2029-03-30', 333.33, 0, 'pe
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007100000005', '00000000-0000-0000-0000-007100000005', 'expropiado', 20100, 500, 48, 'expropiado')
+VALUES ('00000000-0000-0000-0000-007100000005', '00000000-0000-0000-0000-007100000005', '73963744', 20100, 500, 48, 'expropiado')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -10412,7 +10422,7 @@ VALUES ('00000000-0000-0000-0000-007100000005', 48, '2029-03-30', 270.83, 0, 'pe
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-007100000006', '00000000-0000-0000-0000-007100000006', 'expropiado', 20100, 500, 48, 'expropiado')
+VALUES ('00000000-0000-0000-0000-007100000006', '00000000-0000-0000-0000-007100000006', '00035198', 20100, 500, 48, 'expropiado')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -11027,12 +11037,12 @@ VALUES ('00000000-0000-0000-0000-006500000003', 48, '2029-03-30', 666.67, 0, 'pe
 
 
 INSERT INTO clients (dni, names, phone, district, province, department)
-VALUES ('GEN-18743691', 'EDWIN ALBERTO SEPULVEDA DELGADO', '91935431633', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
+VALUES ('GEN-18522429', 'EDWIN ALBERTO SEPULVEDA DELGADO', '91935431633', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
 ON CONFLICT (dni) DO NOTHING;
 
 
 INSERT INTO sales (id, lot_id, client_id, total_sale_price, initial_amount_paid, installments_count, status)
-VALUES ('00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-006600000002', 'GEN-18743691', 43500, 500, 48, 'expropiado')
+VALUES ('00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-006600000002', 'GEN-18522429', 43500, 500, 48, 'expropiado')
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -11249,11 +11259,11 @@ VALUES ('00000000-0000-0000-0000-007100000009', '47417177', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000004', '12345678', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2025-03-20', 356, '01445613', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000004', 'GEN-08662810', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2025-03-20', 356, '01445613', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000005', '12345678', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2025-03-20', 334, '01444914', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000005', 'GEN-08662810', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2025-03-20', 334, '01444914', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11261,15 +11271,15 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000004', 'expropiado', '00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-000000000010', '2025-03-26', 500, '00000118', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-007100000004', 'GEN-09795609', '00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-000000000010', '2025-03-26', 500, '00000118', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000005', 'expropiado', '00000000-0000-0000-0000-007100000005', '00000000-0000-0000-0000-000000000010', '2025-03-26', 500, '00000119', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-007100000005', '73963744', '00000000-0000-0000-0000-007100000005', '00000000-0000-0000-0000-000000000010', '2025-03-26', 500, '00000119', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000006', 'expropiado', '00000000-0000-0000-0000-007100000006', '00000000-0000-0000-0000-000000000010', '2025-03-26', 500, '00000120', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-007100000006', '00035198', '00000000-0000-0000-0000-007100000006', '00000000-0000-0000-0000-000000000010', '2025-03-26', 500, '00000120', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11277,7 +11287,7 @@ VALUES ('00000000-0000-0000-0000-006500000004', '72681568', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006500000003', '12345678', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-03-28', 500, '000000562', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-006500000003', '80246083', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-03-28', 500, '000000562', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11340,6 +11350,11 @@ INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date
 VALUES ('00000000-0000-0000-0000-007200000006', '72072229', '00000000-0000-0000-0000-007200000006', '00000000-0000-0000-0000-000000000012', '2025-04-19', 500, '000002826', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
+INSERT INTO clients (dni, names, phone, district, province, department)
+VALUES ('URBIS GROUP', 'URBIS GROUP', '', 'CALLERIA', 'CORONEL PORTILLO', 'UCAYALI')
+ON CONFLICT (dni) DO NOTHING;
+
+
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
 VALUES ('00000000-0000-0000-0000-006500000001', 'URBIS GROUP', '00000000-0000-0000-0000-006500000001', '00000000-0000-0000-0000-000000000012', '2025-04-20', 50, '000001904', 'TRANSFERENCIA', 'separacion', TRUE, 'PERDIDA');
 
@@ -11385,19 +11400,19 @@ VALUES ('00000000-0000-0000-0000-007200000004', '45603407', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006500000003', '12345678', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000012', '2025-04-30', 666.67, '000000695', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-006500000003', '80246083', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000012', '2025-04-30', 666.67, '000000695', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000004', 'expropiado', '00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-000000000012', '2025-04-30', 333.33, '000001138', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-007100000004', 'GEN-09795609', '00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-000000000012', '2025-04-30', 333.33, '000001138', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000005', 'expropiado', '00000000-0000-0000-0000-007100000005', '00000000-0000-0000-0000-000000000012', '2025-04-30', 270.83, '000001137', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-007100000005', '73963744', '00000000-0000-0000-0000-007100000005', '00000000-0000-0000-0000-000000000012', '2025-04-30', 270.83, '000001137', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000006', 'expropiado', '00000000-0000-0000-0000-007100000006', '00000000-0000-0000-0000-000000000012', '2025-04-30', 270.83, '000001136', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-007100000006', '00035198', '00000000-0000-0000-0000-007100000006', '00000000-0000-0000-0000-000000000012', '2025-04-30', 270.83, '000001136', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11405,7 +11420,7 @@ VALUES ('00000000-0000-0000-0000-007100000003', '44175264', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2025-05-12', 50, '000001900', 'TRANSFERENCIA', 'separacion', TRUE, 'PERDIDA');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2025-05-12', 50, '000001900', 'TRANSFERENCIA', 'separacion', TRUE, 'PERDIDA');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11429,7 +11444,7 @@ VALUES ('00000000-0000-0000-0000-007200000002', '44419644', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006500000003', '12345678', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-05-30', 666.67, '000000852', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-006500000003', '80246083', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-05-30', 666.67, '000000852', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11501,11 +11516,11 @@ VALUES ('00000000-0000-0000-0000-006500000004', '72681568', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-06-30', 500, '000000129', 'DEPOSITO', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-06-30', 500, '000000129', 'DEPOSITO', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-06-30', 500, '212', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-06-30', 500, '212', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11533,7 +11548,7 @@ VALUES ('00000000-0000-0000-0000-007600000002', '09995721', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006500000003', '12345678', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-06-30', 666.67, '0000000995', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-006500000003', '80246083', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-06-30', 666.67, '0000000995', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11545,15 +11560,15 @@ VALUES ('00000000-0000-0000-0000-007200000006', '72072229', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-07-06', 500, '000000406', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-07-06', 500, '000000406', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006500000002', '12345678', '00000000-0000-0000-0000-006500000002', '00000000-0000-0000-0000-000000000011', '2025-07-17', 500, '04204429', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-006500000002', '61122481', '00000000-0000-0000-0000-006500000002', '00000000-0000-0000-0000-000000000011', '2025-07-17', 500, '04204429', 'TRANSFERENCIA', 'inicial', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-07-18', 500, '03494765', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-07-18', 500, '03494765', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11589,7 +11604,7 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006500000003', '12345678', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-07-31', 666.67, '000001142', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-006500000003', '80246083', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-07-31', 666.67, '000001142', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11633,27 +11648,27 @@ VALUES ('00000000-0000-0000-0000-007600000002', '09995721', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000011', '2025-08-09', 500, '2597900', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000011', '2025-08-09', 500, '2597900', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000007', '12345678', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000010', '2025-08-09', 500, '03621415', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000007', 'GEN-35368668', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000010', '2025-08-09', 500, '03621415', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000008', '12345678', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000012', '2025-08-09', 500, '00950170', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000008', '45359162', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000012', '2025-08-09', 500, '00950170', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-08-14', 770.83, '0383422', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-08-14', 770.83, '0383422', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-08-14', 770.83, '0383422', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-08-14', 770.83, '0383422', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000002', '12345678', '00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-000000000010', '2025-08-18', 100, 'xxxxxxxxxx', 'TRANSFERENCIA', 'separacion', TRUE, 'PERDIDA');
+VALUES ('00000000-0000-0000-0000-006600000002', 'GEN-18522429', '00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-000000000010', '2025-08-18', 100, 'xxxxxxxxxx', 'TRANSFERENCIA', 'separacion', TRUE, 'PERDIDA');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11661,27 +11676,27 @@ VALUES ('00000000-0000-0000-0000-007100000009', '47417177', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2025-08-21', 100, '000000224', 'TRANSFERENCIA', 'separacion', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2025-08-21', 100, '000000224', 'TRANSFERENCIA', 'separacion', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2025-08-25', 500, '000002435', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2025-08-25', 500, '000002435', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2025-08-25', 500, '000004820', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2025-08-25', 500, '000004820', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2025-08-25', 500, '000004821', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2025-08-25', 500, '000004821', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000005', '12345678', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000010', '2025-08-26', 500, '000000028156', 'DEPOSITO', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000005', 'GEN-97221779', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000010', '2025-08-26', 500, '000000028156', 'DEPOSITO', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000006', '12345678', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000010', '2025-08-26', 500, '000000028157', 'DEPOSITO', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000006', 'GEN-97221779', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000010', '2025-08-26', 500, '000000028157', 'DEPOSITO', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11697,7 +11712,7 @@ VALUES ('00000000-0000-0000-0000-007100000012', '23003116', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-08-29', 395.83, '000000448', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-08-29', 395.83, '000000448', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11709,11 +11724,11 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-09-01', 770.83, '0373834', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-09-01', 770.83, '0373834', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-09-01', 770.83, '0373834', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-09-01', 770.83, '0373834', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11729,7 +11744,7 @@ VALUES ('00000000-0000-0000-0000-007100000008', '48358337', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-09-02', 395, '04542449', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-09-02', 395, '04542449', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11757,11 +11772,11 @@ VALUES ('00000000-0000-0000-0000-007600000002', '09995721', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000007', '12345678', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2025-09-15', 333.33, '06384073', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000007', 'GEN-35368668', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2025-09-15', 333.33, '06384073', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000011', '2025-09-15', 333.33, '06070997', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000011', '2025-09-15', 333.33, '06070997', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11789,11 +11804,11 @@ VALUES ('00000000-0000-0000-0000-007100000012', '23003116', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2025-09-29', 333.4, '000003003', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2025-09-29', 333.4, '000003003', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-09-30', 395.83, '000000471', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-09-30', 395.83, '000000471', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11805,7 +11820,7 @@ VALUES ('00000000-0000-0000-0000-007200000004', '45603407', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000008', '12345678', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2025-09-30', 333.33, '06251563', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000008', '45359162', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2025-09-30', 333.33, '06251563', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11813,11 +11828,11 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2025-09-30', 333.33, '000004995', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2025-09-30', 333.33, '000004995', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2025-09-30', 333.33, '000004996', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2025-09-30', 333.33, '000004996', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11841,11 +11856,11 @@ VALUES ('00000000-0000-0000-0000-006500000006', '00117872', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-10-01', 395, '028271138', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-10-01', 395, '028271138', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006500000003', '12345678', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-10-01', 666.67, '000001302', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-006500000003', '80246083', '00000000-0000-0000-0000-006500000003', '00000000-0000-0000-0000-000000000010', '2025-10-01', 666.67, '000001302', 'TRANSFERENCIA', 'cuota', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11853,11 +11868,11 @@ VALUES ('00000000-0000-0000-0000-007100000002', '72681568', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-10-03', 770.83, '112518251003', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-10-03', 770.83, '112518251003', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-10-03', 770.83, '3511146', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-10-03', 770.83, '3511146', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11873,19 +11888,19 @@ VALUES ('00000000-0000-0000-0000-007100000008', '48358337', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000003', '48343379', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-10-07', 1000, '01057153', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006600000003', 'GEN-89203578', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-10-07', 1000, '01057153', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2025-10-07', 400, '000000249', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2025-10-07', 400, '000000249', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000010', '12345678', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2025-10-07', 500, '000000250', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000010', '75731855', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2025-10-07', 500, '000000250', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000011', '12345678', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2025-10-10', 100, '00000000', 'TRANSFERENCIA', 'separacion', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000011', '75731855', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2025-10-10', 100, '00000000', 'TRANSFERENCIA', 'separacion', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11897,35 +11912,35 @@ VALUES ('00000000-0000-0000-0000-007600000002', '09995721', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000012', '2025-10-16', 333.33, '000002461', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000012', '2025-10-16', 333.33, '000002461', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000005', '12345678', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2025-10-17', 333.33, '00077219', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000005', 'GEN-97221779', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2025-10-17', 333.33, '00077219', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000006', '12345678', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2025-10-17', 395.83, '00079909', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000006', 'GEN-97221779', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2025-10-17', 395.83, '00079909', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000002', '12345678', '00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-000000000010', '2025-10-20', 100, '000002247', 'TRANSFERENCIA', 'separacion', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-006600000002', 'GEN-18522429', '00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-000000000010', '2025-10-20', 100, '000002247', 'TRANSFERENCIA', 'separacion', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000002', '12345678', '00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-000000000010', '2025-10-20', 100, '000002248', 'TRANSFERENCIA', 'separacion', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-006600000002', 'GEN-18522429', '00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-000000000010', '2025-10-20', 100, '000002248', 'TRANSFERENCIA', 'separacion', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000007', '12345678', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2025-10-22', 333.33, '00191135', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000007', 'GEN-35368668', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2025-10-22', 333.33, '00191135', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000004', '12345678', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000011', '2025-10-23', 500, '03034485', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000004', 'GEN-08662810', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000011', '2025-10-23', 500, '03034485', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000005', '12345678', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000011', '2025-10-23', 500, '03042729', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000005', 'GEN-08662810', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000011', '2025-10-23', 500, '03042729', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11949,11 +11964,11 @@ VALUES ('00000000-0000-0000-0000-006500000006', '00117872', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2025-10-29', 333.4, '0000003044', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2025-10-29', 333.4, '0000003044', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000012', '2025-10-30', 395.83, '000000490', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000012', '2025-10-30', 395.83, '000000490', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11965,23 +11980,23 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2025-10-30', 333.33, '000005107', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2025-10-30', 333.33, '000005107', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2025-10-30', 333.33, '000005108', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2025-10-30', 333.33, '000005108', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2025-10-31', 333.33, '000000261', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2025-10-31', 333.33, '000000261', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000008', '12345678', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2025-10-31', 333.33, '05647550', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000008', '45359162', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2025-10-31', 333.33, '05647550', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-11-01', 395, '01221442', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-11-01', 395, '01221442', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -11993,15 +12008,11 @@ VALUES ('00000000-0000-0000-0000-007200000004', '45603407', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-11-04', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-11-04', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-11-04', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
-
-
-INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000003', '44175264', '00000000-0000-0000-0000-007100000003', '00000000-0000-0000-0000-000000000010', '2025-11-11', 270.8, '000006349', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-11-04', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12009,11 +12020,15 @@ VALUES ('00000000-0000-0000-0000-007100000003', '44175264', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000011', '12345678', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2025-11-11', 400, '350', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007100000003', '44175264', '00000000-0000-0000-0000-007100000003', '00000000-0000-0000-0000-000000000010', '2025-11-11', 270.8, '000006349', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000002', '12345678', '00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-000000000010', '2025-11-12', 300, '13717527', 'BILLETERA DIGITAL', 'inicial', TRUE, 'Expropiado');
+VALUES ('00000000-0000-0000-0000-007400000011', '75731855', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2025-11-11', 400, '350', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+
+
+INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
+VALUES ('00000000-0000-0000-0000-006600000002', 'GEN-18522429', '00000000-0000-0000-0000-006600000002', '00000000-0000-0000-0000-000000000010', '2025-11-12', 300, '13717527', 'BILLETERA DIGITAL', 'inicial', TRUE, 'Expropiado');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12025,31 +12040,31 @@ VALUES ('00000000-0000-0000-0000-007100000011', '23003116', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2025-11-18', 333.33, '000002475', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2025-11-18', 333.33, '000002475', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000005', '12345678', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2025-11-25', 333.33, '00981716', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000005', 'GEN-97221779', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2025-11-25', 333.33, '00981716', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000006', '12345678', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2025-11-25', 395.83, '00989604', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000006', 'GEN-97221779', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2025-11-25', 395.83, '00989604', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000003', '48343379', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-11-27', 770, '00247912', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006600000003', 'GEN-89203578', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-11-27', 770, '00247912', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000003', '48343379', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-11-27', 770, '00246719', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006600000003', 'GEN-89203578', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-11-27', 770, '00246719', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000003', '48343379', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-11-27', 770, '00245354', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006600000003', 'GEN-89203578', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-11-27', 770, '00245354', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000003', '48343379', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-11-27', 770, '00244401', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006600000003', 'GEN-89203578', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2025-11-27', 770, '00244401', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12057,15 +12072,15 @@ VALUES ('00000000-0000-0000-0000-007100000003', '44175264', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-11-29', 395.83, '000000507', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-11-29', 395.83, '000000507', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2025-11-29', 333.4, '000003080', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2025-11-29', 333.4, '000003080', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000010', '12345678', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2025-11-29', 356, '386', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000010', '75731855', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2025-11-29', 356, '386', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12077,11 +12092,11 @@ VALUES ('00000000-0000-0000-0000-007200000006', '72072229', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000004', '12345678', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2025-11-30', 356, '01288519', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000004', 'GEN-08662810', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2025-11-30', 356, '01288519', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000005', '12345678', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2025-11-30', 334, '02189406', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000005', 'GEN-08662810', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2025-11-30', 334, '02189406', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12097,15 +12112,15 @@ VALUES ('00000000-0000-0000-0000-007100000008', '48358337', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-12-01', 770.83, '308700168', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-12-01', 770.83, '308700168', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-12-01', 770.83, '308700167', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-12-01', 770.83, '308700167', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-12-01', 395, '01276581', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-12-01', 395, '01276581', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12129,15 +12144,15 @@ VALUES ('00000000-0000-0000-0000-007200000004', '45603407', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000008', '12345678', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2025-12-02', 333.33, '01769187', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000008', '45359162', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2025-12-02', 333.33, '01769187', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2025-12-02', 333.33, '000005219', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2025-12-02', 333.33, '000005219', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2025-12-02', 333.33, '000005218', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2025-12-02', 333.33, '000005218', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12145,7 +12160,7 @@ VALUES ('00000000-0000-0000-0000-007100000009', '47417177', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-12-05', 395, '00948462', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2025-12-05', 395, '00948462', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12161,23 +12176,23 @@ VALUES ('00000000-0000-0000-0000-006500000006', '00117872', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000007', '12345678', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2025-12-16', 333.33, '07417785', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000007', 'GEN-35368668', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2025-12-16', 333.33, '07417785', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000007', '12345678', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2025-12-16', 333.33, '07432306', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000007', 'GEN-35368668', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2025-12-16', 333.33, '07432306', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000011', '2025-12-17', 333.33, '04931890', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000011', '2025-12-17', 333.33, '04931890', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000005', '12345678', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2025-12-19', 333.33, '01824269', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000005', 'GEN-97221779', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2025-12-19', 333.33, '01824269', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000006', '12345678', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2025-12-19', 395.83, '01832746', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000006', 'GEN-97221779', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2025-12-19', 395.83, '01832746', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12205,7 +12220,7 @@ VALUES ('00000000-0000-0000-0000-007100000012', '23003116', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2025-12-29', 333.4, '000003118', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2025-12-29', 333.4, '000003118', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12213,15 +12228,15 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-12-30', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2025-12-30', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-12-30', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2025-12-30', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-12-30', 395.83, '000000534', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2025-12-30', 395.83, '000000534', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12233,19 +12248,19 @@ VALUES ('00000000-0000-0000-0000-007200000006', '72072229', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000010', '12345678', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2025-12-30', 356, '00000283', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000010', '75731855', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2025-12-30', 356, '00000283', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000011', '12345678', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2025-12-30', 334, '284', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000011', '75731855', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2025-12-30', 334, '284', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000004', '12345678', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2025-12-31', 356, '01561862', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000004', 'GEN-08662810', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2025-12-31', 356, '01561862', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000005', '12345678', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2025-12-31', 334, '01563892', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000005', 'GEN-08662810', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2025-12-31', 334, '01563892', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12265,15 +12280,15 @@ VALUES ('00000000-0000-0000-0000-007200000004', '45603407', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-01-02', 333.33, '000005372', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-01-02', 333.33, '000005372', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-01-02', 333.33, '000005373', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-01-02', 333.33, '000005373', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-01-07', 333.33, '000000289', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-01-07', 333.33, '000000289', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12281,11 +12296,11 @@ VALUES ('00000000-0000-0000-0000-007100000002', '72681568', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000005', '12345678', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2026-01-13', 333.33, '00104082', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000005', 'GEN-97221779', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2026-01-13', 333.33, '00104082', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000006', '12345678', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2026-01-13', 395.83, '01419530', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000006', 'GEN-97221779', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2026-01-13', 395.83, '01419530', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12297,7 +12312,7 @@ VALUES ('00000000-0000-0000-0000-006500000006', '00117872', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2026-01-17', 333.33, '501', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2026-01-17', 333.33, '501', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12305,7 +12320,7 @@ VALUES ('00000000-0000-0000-0000-007200000004', '45603407', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-01-29', 333.4, '000003145', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-01-29', 333.4, '000003145', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12321,11 +12336,11 @@ VALUES ('00000000-0000-0000-0000-007200000002', '44419644', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000008', '12345678', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2026-01-30', 333.33, '05548116', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000008', '45359162', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2026-01-30', 333.33, '05548116', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000008', '12345678', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2026-01-30', 333.33, '05548116', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000008', '45359162', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2026-01-30', 333.33, '05548116', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12333,7 +12348,7 @@ VALUES ('00000000-0000-0000-0000-007600000002', '09995721', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2026-01-31', 395.83, '540', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2026-01-31', 395.83, '540', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12349,11 +12364,11 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-02-02', 770.83, '0383422', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-02-02', 770.83, '0383422', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-02-02', 770.83, '0383422', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-02-02', 770.83, '0383422', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12361,11 +12376,11 @@ VALUES ('00000000-0000-0000-0000-007100000002', '72681568', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-02-02', 333.33, '000005544', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-02-02', 333.33, '000005544', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-02-02', 333.33, '000005543', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-02-02', 333.33, '000005543', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12377,7 +12392,7 @@ VALUES ('00000000-0000-0000-0000-007100000008', '48358337', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000011', '12345678', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2026-02-05', 334, '000000059', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000011', '75731855', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2026-02-05', 334, '000000059', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12393,27 +12408,27 @@ VALUES ('00000000-0000-0000-0000-007100000012', '23003116', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-02-06', 395, '03072428', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-02-06', 395, '03072428', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000010', '12345678', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2026-02-06', 356, '000000063', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000010', '75731855', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2026-02-06', 356, '000000063', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2026-02-16', 333.33, '570', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2026-02-16', 333.33, '570', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-02-19', 333.33, '00000317', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-02-19', 333.33, '00000317', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-02-19', 333.33, '00000318', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-02-19', 333.33, '00000318', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-02-19', 333.33, '00000319', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-02-19', 333.33, '00000319', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12425,11 +12440,11 @@ VALUES ('00000000-0000-0000-0000-006500000006', '00117872', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000007', '12345678', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2026-02-22', 333.33, '03252254', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000007', 'GEN-35368668', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2026-02-22', 333.33, '03252254', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000007', '12345678', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2026-02-22', 333.33, '03261319', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000007', 'GEN-35368668', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000011', '2026-02-22', 333.33, '03261319', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12441,7 +12456,7 @@ VALUES ('00000000-0000-0000-0000-007100000011', '23003116', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-02-28', 333.4, '00003165', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-02-28', 333.4, '00003165', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12461,23 +12476,23 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-03-01', 333.33, '000005682', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-03-01', 333.33, '000005682', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-03-01', 333.33, '000005681', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-03-01', 333.33, '000005681', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-03-02', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-03-02', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-03-02', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-03-02', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2026-03-02', 395.83, '596', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2026-03-02', 395.83, '596', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12485,11 +12500,11 @@ VALUES ('00000000-0000-0000-0000-007200000004', '45603407', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000004', '12345678', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2026-03-02', 356, '03984465', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000004', 'GEN-08662810', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2026-03-02', 356, '03984465', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000005', '12345678', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2026-03-02', 334, '03984698', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000005', 'GEN-08662810', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2026-03-02', 334, '03984698', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12505,23 +12520,23 @@ VALUES ('00000000-0000-0000-0000-007100000002', '72681568', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-03-06', 395, '01559880', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-03-06', 395, '01559880', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000010', '12345678', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2026-03-12', 356, '000000333', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000010', '75731855', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2026-03-12', 356, '000000333', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000011', '12345678', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2026-03-12', 334, '000000333', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000011', '75731855', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2026-03-12', 334, '000000333', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000011', '12345678', '00000000-0000-0000-0000-007300000011', '00000000-0000-0000-0000-000000000010', '2026-03-17', 500, '784,465,192,8669', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000011', '07530376', '00000000-0000-0000-0000-007300000011', '00000000-0000-0000-0000-000000000010', '2026-03-17', 500, '784,465,192,8669', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2026-03-23', 333.33, '000002522', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2026-03-23', 333.33, '000002522', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12545,7 +12560,7 @@ VALUES ('00000000-0000-0000-0000-007100000012', '23003116', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000005', '12345678', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2026-03-27', 333.33, '00509688', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000005', 'GEN-97221779', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2026-03-27', 333.33, '00509688', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12593,7 +12608,7 @@ VALUES ('00000000-0000-0000-0000-007600000001', '09995721', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000006', '12345678', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2026-03-27', 395.83, '00520318', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000006', 'GEN-97221779', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2026-03-27', 395.83, '00520318', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12605,11 +12620,11 @@ VALUES ('00000000-0000-0000-0000-006500000006', '00117872', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000003', '48343379', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2026-03-30', 775, '05124480', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006600000003', 'GEN-89203578', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2026-03-30', 775, '05124480', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-03-30', 333.4, '000003208', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-03-30', 333.4, '000003208', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12617,15 +12632,15 @@ VALUES ('00000000-0000-0000-0000-007600000002', '09995721', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2026-03-31', 395.83, '594', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2026-03-31', 395.83, '594', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-04-01', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-04-01', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-04-01', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-04-01', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12637,11 +12652,11 @@ VALUES ('00000000-0000-0000-0000-007200000006', '72072229', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000008', '12345678', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2026-04-01', 333.33, '01490827', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000008', '45359162', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2026-04-01', 333.33, '01490827', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000008', '12345678', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2026-04-01', 333.33, '01532335', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000008', '45359162', '00000000-0000-0000-0000-007300000008', '00000000-0000-0000-0000-000000000011', '2026-04-01', 333.33, '01532335', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12649,11 +12664,11 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-04-01', 333.33, '000005784', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-04-01', 333.33, '000005784', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-04-01', 333.33, '000005785', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-04-01', 333.33, '000005785', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12661,11 +12676,11 @@ VALUES ('00000000-0000-0000-0000-007200000005', '72072229', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000004', '12345678', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2026-04-03', 356, '03190363', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000004', 'GEN-08662810', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2026-04-03', 356, '03190363', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000005', '12345678', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2026-04-03', 334, '03191019', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000005', 'GEN-08662810', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2026-04-03', 334, '03191019', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12685,19 +12700,19 @@ VALUES ('00000000-0000-0000-0000-007200000002', '44419644', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000011', '12345678', '00000000-0000-0000-0000-007300000011', '00000000-0000-0000-0000-000000000010', '2026-04-07', 409, '784,465,197,4748', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000011', '07530376', '00000000-0000-0000-0000-007300000011', '00000000-0000-0000-0000-000000000010', '2026-04-07', 409, '784,465,197,4748', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000010', '12345678', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2026-04-08', 356, '000000348', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000010', '75731855', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2026-04-08', 356, '000000348', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000011', '12345678', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2026-04-08', 334, '000000349', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000011', '75731855', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2026-04-08', 334, '000000349', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-04-10', 395, '00730812', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-04-10', 395, '00730812', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12705,11 +12720,11 @@ VALUES ('00000000-0000-0000-0000-007200000001', 'URBIS GROUP', '00000000-0000-00
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000005', '12345678', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2026-04-19', 333.33, '03351272', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000005', 'GEN-97221779', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2026-04-19', 333.33, '03351272', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000006', '12345678', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2026-04-19', 395.83, '03358278', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000006', 'GEN-97221779', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2026-04-19', 395.83, '03358278', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12753,7 +12768,7 @@ VALUES ('00000000-0000-0000-0000-007200000003', '45603407', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000004', 'expropiado', '00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-000000000010', '2026-04-26', 500, '0554376', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007100000004', 'GEN-09795609', '00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-000000000010', '2026-04-26', 500, '0554376', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12845,15 +12860,15 @@ VALUES ('00000000-0000-0000-0000-007600000002', '09995721', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000012', '2026-04-17', 333.33, '00550318', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000012', '2026-04-17', 333.33, '00550318', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000003', '48343379', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2026-04-30', 771, '01550018', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006600000003', 'GEN-89203578', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2026-04-30', 771, '01550018', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-04-30', 333.33, '000003229', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-04-30', 333.33, '000003229', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12861,11 +12876,11 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-05-01', 333.33, '000005924', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-05-01', 333.33, '000005924', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-05-01', 333.33, '000005923', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-05-01', 333.33, '000005923', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12873,11 +12888,11 @@ VALUES ('00000000-0000-0000-0000-007100000002', '72681568', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000006', 'expropiado', '00000000-0000-0000-0000-007100000006', '00000000-0000-0000-0000-000000000010', '2026-05-01', 50, '000006677', 'TRANSFERENCIA', 'separacion', TRUE, 'PERDIDA');
+VALUES ('00000000-0000-0000-0000-007100000006', '00035198', '00000000-0000-0000-0000-007100000006', '00000000-0000-0000-0000-000000000010', '2026-05-01', 50, '000006677', 'TRANSFERENCIA', 'separacion', TRUE, 'PERDIDA');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-05-01', 395, '05476995', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-05-01', 395, '05476995', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12889,11 +12904,11 @@ VALUES ('00000000-0000-0000-0000-007200000005', '72072229', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-05-04', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-05-04', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-05-04', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-05-04', 770.83, '0339636', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12905,7 +12920,7 @@ VALUES ('00000000-0000-0000-0000-007200000004', '45603407', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000011', '12345678', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2026-05-08', 395.83, '000000618', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000011', '08561166', '00000000-0000-0000-0000-007200000011', '00000000-0000-0000-0000-000000000010', '2026-05-08', 395.83, '000000618', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12921,11 +12936,11 @@ VALUES ('00000000-0000-0000-0000-007100000008', '48358337', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000004', '12345678', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2026-05-16', 356, '01124597', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000004', 'GEN-08662810', '00000000-0000-0000-0000-007300000004', '00000000-0000-0000-0000-000000000012', '2026-05-16', 356, '01124597', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000005', '12345678', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2026-05-16', 334, '01125336', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000005', 'GEN-08662810', '00000000-0000-0000-0000-007300000005', '00000000-0000-0000-0000-000000000012', '2026-05-16', 334, '01125336', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12941,35 +12956,35 @@ VALUES ('00000000-0000-0000-0000-006700000010', '12345678', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000010', '12345678', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2026-05-19', 356, '000000363', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000010', '75731855', '00000000-0000-0000-0000-007400000010', '00000000-0000-0000-0000-000000000010', '2026-05-19', 356, '000000363', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000011', '12345678', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2026-05-19', 334, '000000362', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000011', '75731855', '00000000-0000-0000-0000-007400000011', '00000000-0000-0000-0000-000000000010', '2026-05-19', 334, '000000362', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000002', '12345678', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2026-05-22', 333.33, '000002532', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000002', '07493116', '00000000-0000-0000-0000-007400000002', '00000000-0000-0000-0000-000000000010', '2026-05-22', 333.33, '000002532', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000005', '12345678', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2026-05-23', 333.33, '00882429', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000005', 'GEN-97221779', '00000000-0000-0000-0000-007400000005', '00000000-0000-0000-0000-000000000012', '2026-05-23', 333.33, '00882429', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000006', '12345678', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2026-05-23', 395.83, '00887614', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000006', 'GEN-97221779', '00000000-0000-0000-0000-007400000006', '00000000-0000-0000-0000-000000000012', '2026-05-23', 395.83, '00887614', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007600000003', '12345678', '00000000-0000-0000-0000-007600000003', '00000000-0000-0000-0000-000000000012', '2026-05-28', 500, '000000039', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007600000003', 'GEN-98024285', '00000000-0000-0000-0000-007600000003', '00000000-0000-0000-0000-000000000012', '2026-05-28', 500, '000000039', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007600000004', '12345678', '00000000-0000-0000-0000-007600000004', '00000000-0000-0000-0000-000000000012', '2026-05-28', 500, '000000040', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007600000004', 'GEN-98024285', '00000000-0000-0000-0000-007600000004', '00000000-0000-0000-0000-000000000012', '2026-05-28', 500, '000000040', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007600000005', '12345678', '00000000-0000-0000-0000-007600000005', '00000000-0000-0000-0000-000000000012', '2026-05-28', 500, '000000041', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007600000005', 'GEN-98024285', '00000000-0000-0000-0000-007600000005', '00000000-0000-0000-0000-000000000012', '2026-05-28', 500, '000000041', 'TRANSFERENCIA', 'inicial', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -12985,7 +13000,7 @@ VALUES ('00000000-0000-0000-0000-006500000004', '72681568', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006600000003', '48343379', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2026-06-01', 775, '03431596', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006600000003', 'GEN-89203578', '00000000-0000-0000-0000-006600000003', '00000000-0000-0000-0000-000000000012', '2026-06-01', 775, '03431596', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -13001,7 +13016,7 @@ VALUES ('00000000-0000-0000-0000-007100000008', '48358337', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007100000004', 'expropiado', '00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-000000000010', '2026-06-02', 471, '3604905', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007100000004', 'GEN-09795609', '00000000-0000-0000-0000-007100000004', '00000000-0000-0000-0000-000000000010', '2026-06-02', 471, '3604905', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -13009,11 +13024,11 @@ VALUES ('00000000-0000-0000-0000-007200000006', '72072229', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000006', '12345678', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-06-01', 333.33, '000003260', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000006', '06849661', '00000000-0000-0000-0000-007300000006', '00000000-0000-0000-0000-000000000010', '2026-06-01', 333.33, '000003260', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000011', '12345678', '00000000-0000-0000-0000-007300000011', '00000000-0000-0000-0000-000000000010', '2026-06-02', 409, '784,465,192,2534', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000011', '07530376', '00000000-0000-0000-0000-007300000011', '00000000-0000-0000-0000-000000000010', '2026-06-02', 409, '784,465,192,2534', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -13021,19 +13036,19 @@ VALUES ('00000000-0000-0000-0000-007300000009', '46155068', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000003', '12345678', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-05-30', 333.33, '000006044', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000003', '42688684', '00000000-0000-0000-0000-007400000003', '00000000-0000-0000-0000-000000000010', '2026-05-30', 333.33, '000006044', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007400000004', '12345678', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-05-30', 333.33, '000006045', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007400000004', '42688684', '00000000-0000-0000-0000-007400000004', '00000000-0000-0000-0000-000000000010', '2026-05-30', 333.33, '000006045', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000003', '6115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-06-03', 770.83, '0383422', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000003', '06115804', '00000000-0000-0000-0000-006700000003', '00000000-0000-0000-0000-000000000010', '2026-06-03', 770.83, '0383422', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-006700000004', '6115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-06-03', 770.83, '0383422', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-006700000004', '06115804', '00000000-0000-0000-0000-006700000004', '00000000-0000-0000-0000-000000000010', '2026-06-03', 770.83, '0383422', 'DEPOSITO', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -13049,7 +13064,7 @@ VALUES ('00000000-0000-0000-0000-007200000005', '72072229', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007300000007', '12345678', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000010', '2026-06-17', 333.33, '784,465,193,4380', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007300000007', 'GEN-35368668', '00000000-0000-0000-0000-007300000007', '00000000-0000-0000-0000-000000000010', '2026-06-17', 333.33, '784,465,193,4380', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
@@ -13081,15 +13096,15 @@ VALUES ('00000000-0000-0000-0000-007100000012', '23003116', '00000000-0000-0000-
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-06-17', 333.33, '000000474', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-06-17', 333.33, '000000474', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000008', '12345678', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-06-17', 333.33, '000000375', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000008', '77038963', '00000000-0000-0000-0000-007200000008', '00000000-0000-0000-0000-000000000010', '2026-06-17', 333.33, '000000375', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO daily_income (lot_id, client_id, sale_id, financial_account_id, date, amount, operation_number, operation_type, income_type, approved, observation)
-VALUES ('00000000-0000-0000-0000-007200000012', '12345678', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-06-05', 395, '03907594', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
+VALUES ('00000000-0000-0000-0000-007200000012', '45579642', '00000000-0000-0000-0000-007200000012', '00000000-0000-0000-0000-000000000011', '2026-06-05', 395, '03907594', 'TRANSFERENCIA', 'cuota', TRUE, 'ACEPTADO');
 
 
 INSERT INTO expenses (project_id, type, month, year, issue_date, reception_date, company, recipient, sender, amount, document_type, payment_method, document_number, description)

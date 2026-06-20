@@ -1,0 +1,8 @@
+/* App-specific custom navigation highlights */
+
+.active-nav {
+  background-color: var(--primary) !important;
+  color: hsl(222, 28%, 7%) !important;
+  font-weight: 600 !important;
+  border-color: var(--primary) !important;
+}

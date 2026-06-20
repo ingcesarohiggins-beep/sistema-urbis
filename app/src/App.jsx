@@ -52,6 +52,11 @@ export default function App() {
   // AUTH LIFECYCLE
   // ==========================================
   useEffect(() => {
+    if (!supabase) {
+      setAuthLoading(false);
+      return;
+    }
+
     // 1. Check existing session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
@@ -85,7 +90,7 @@ export default function App() {
   // FETCH USER PROFILE (on session change)
   // ==========================================
   useEffect(() => {
-    if (!session?.user) {
+    if (!supabase || !session?.user) {
       setUserProfile(null);
       return;
     }
@@ -112,7 +117,7 @@ export default function App() {
   // FETCH ALL DATA (when authenticated)
   // ==========================================
   useEffect(() => {
-    if (!session) return;
+    if (!supabase || !session) return;
 
     const fetchAllData = async () => {
       setDataLoading(true);
@@ -210,6 +215,29 @@ export default function App() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
+
+  // ==========================================
+  // RENDER: Configuration Error
+  // ==========================================
+  if (!supabase) {
+    return (
+      <div style={fullScreenCenter}>
+        <div className="glass-panel" style={{ padding: '40px', maxWidth: '500px', textAlign: 'center' }}>
+          <span style={{ fontSize: '3rem' }}>⚠️</span>
+          <h2 style={{ color: 'hsl(350, 85%, 65%)', marginTop: '16px' }}>Error de Configuración</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.6' }}>
+            Las credenciales de conexión con **Supabase** no están configuradas en este entorno.
+          </p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '16px', background: 'var(--bg-sidebar)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'left' }}>
+            <strong>Solución:</strong><br />
+            Agrega las siguientes variables en la sección de <strong>Secrets</strong> de tu repositorio de GitHub (Settings -&gt; Secrets and variables -&gt; Actions):<br />
+            1. <code>VITE_SUPABASE_URL</code><br />
+            2. <code>VITE_SUPABASE_ANON_KEY</code>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // ==========================================
   // RENDER: Auth Loading

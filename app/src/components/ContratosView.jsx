@@ -102,7 +102,7 @@ function numeroALetras(num) {
   return `${Millones(entero)} CON ${centavosStr}`;
 }
 
-export default function ContratosView({ supabase, session, selectedProject, lots, clients, sales, installments, onRefreshData }) {
+export default function ContratosView({ supabase, session, selectedProject, lots, clients, sales, installments, onRefreshData, permission = 'full' }) {
   const [activeTab, setActiveTab] = useState('generar'); // 'plantilla' or 'generar'
   const [loading, setLoading] = useState(false);
   const [templateText, setTemplateText] = useState('');
@@ -478,15 +478,18 @@ La firma se realiza en {{fecha_firma}}.
               onChange={(e) => setTemplateText(e.target.value)}
               style={{ width: '100%', fontFamily: 'monospace', fontSize: '0.85rem', padding: '16px', boxSizing: 'border-box' }}
               placeholder="Escriba el borrador aquí..."
+              disabled={permission === 'read'}
             />
-            <button 
-              className="btn-primary" 
-              onClick={handleSaveTemplate}
-              disabled={loading}
-              style={{ alignSelf: 'flex-start', padding: '10px 20px' }}
-            >
-              {loading ? 'Guardando...' : '💾 Guardar Plantilla de Contrato'}
-            </button>
+            {permission !== 'read' && (
+              <button 
+                className="btn-primary" 
+                onClick={handleSaveTemplate}
+                disabled={loading}
+                style={{ alignSelf: 'flex-start', padding: '10px 20px' }}
+              >
+                {loading ? 'Guardando...' : '💾 Guardar Plantilla de Contrato'}
+              </button>
+            )}
           </div>
 
           {/* Tags Sidebar */}
@@ -499,20 +502,20 @@ La firma se realiza en {{fecha_firma}}.
               {contractTags.map((tagObj, idx) => (
                 <div 
                   key={idx} 
-                  onClick={() => handleInsertTag(tagObj.tag)}
+                  onClick={() => permission !== 'read' && handleInsertTag(tagObj.tag)}
                   style={{ 
                     padding: '8px 12px', 
                     background: 'rgba(255, 255, 255, 0.03)', 
                     border: '1px solid var(--border-color)', 
                     borderRadius: '6px', 
-                    cursor: 'pointer',
+                    cursor: permission === 'read' ? 'default' : 'pointer',
                     fontSize: '0.75rem',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '2px',
                     transition: 'all 0.2s'
                   }}
-                  onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--primary)'}
+                  onMouseOver={(e) => permission !== 'read' && (e.currentTarget.style.borderColor = 'var(--primary)')}
                   onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                 >
                   <code style={{ color: 'var(--primary)', fontWeight: 'bold' }}>{tagObj.tag}</code>
@@ -632,13 +635,15 @@ La firma se realiza en {{fecha_firma}}.
                                 onChange={(e) => handleUploadSignedContract(e, sale)}
                                 style={{ display: 'none' }} 
                               />
-                              <label 
-                                htmlFor={`file-upload-${lot.id}`} 
-                                className="btn-secondary" 
-                                style={{ padding: '4px 8px', fontSize: '0.75rem', cursor: 'pointer', display: 'inline-block', margin: 0 }}
-                              >
-                                📤 Subir
-                              </label>
+                              {permission !== 'read' && (
+                                <label 
+                                  htmlFor={`file-upload-${lot.id}`} 
+                                  className="btn-secondary" 
+                                  style={{ padding: '4px 8px', fontSize: '0.75rem', cursor: 'pointer', display: 'inline-block', margin: 0 }}
+                                >
+                                  📤 Subir
+                                </label>
+                              )}
                             </div>
                           ) : (
                             <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Sin Venta Activa</span>

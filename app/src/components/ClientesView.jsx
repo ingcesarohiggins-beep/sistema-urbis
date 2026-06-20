@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { logActivity } from '../utils/activityLogger';
 
-export default function ClientesView({ supabase, session, clients, onRefreshData }) {
+export default function ClientesView({ supabase, session, clients, onRefreshData, permission = 'full' }) {
   const [showModal, setShowModal] = useState(false);
   const [editingClient, setEditingClient] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -201,9 +201,11 @@ export default function ClientesView({ supabase, session, clients, onRefreshData
           <h1 style={{ margin: 0, fontSize: '2rem' }}>Directorio de Clientes</h1>
           <p style={{ color: 'var(--text-muted)', margin: '4px 0 0 0' }}>Gestión de datos de compradores e imágenes de DNIs</p>
         </div>
-        <button className="btn-primary" onClick={handleOpenCreate}>
-          + Registrar Nuevo Cliente
-        </button>
+        {permission !== 'read' && (
+          <button className="btn-primary" onClick={handleOpenCreate}>
+            + Registrar Nuevo Cliente
+          </button>
+        )}
       </div>
 
       {/* Search client */}
@@ -226,96 +228,102 @@ export default function ClientesView({ supabase, session, clients, onRefreshData
           <div className="glass-panel" style={{ width: '550px', padding: '32px', maxHeight: '90vh', overflowY: 'auto' }}>
             <h2 style={{ margin: '0 0 20px 0', fontFamily: 'Outfit' }}>{editingClient ? 'Editar Cliente' : 'Registrar Nuevo Cliente'}</h2>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label>DOCUMENTO DE IDENTIDAD (DNI) *</label>
-                  <input 
-                    type="text" 
-                    maxLength={8} 
-                    value={dni} 
-                    onChange={(e) => setDni(e.target.value.replace(/\D/g, ''))} 
-                    required 
-                    disabled={!!editingClient} 
-                  />
+              <fieldset disabled={permission === 'read'} style={{ border: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className="form-group">
+                    <label>DOCUMENTO DE IDENTIDAD (DNI) *</label>
+                    <input 
+                      type="text" 
+                      maxLength={8} 
+                      value={dni} 
+                      onChange={(e) => setDni(e.target.value.replace(/\D/g, ''))} 
+                      required 
+                      disabled={!!editingClient} 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>CELULAR</label>
+                    <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>CELULAR</label>
-                  <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
-                </div>
-              </div>
 
-              <div className="form-group">
-                <label>NOMBRES COMPLETOS *</label>
-                <input type="text" value={names} onChange={(e) => setNames(e.target.value)} required />
-              </div>
-
-              <div className="form-group">
-                <label>DIRECCIÓN COMPLETA</label>
-                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
                 <div className="form-group">
-                  <label>DEPARTAMENTO</label>
-                  <input type="text" value={department} onChange={(e) => setDepartment(e.target.value)} />
+                  <label>NOMBRES COMPLETOS *</label>
+                  <input type="text" value={names} onChange={(e) => setNames(e.target.value)} required />
                 </div>
-                <div className="form-group">
-                  <label>PROVINCIA</label>
-                  <input type="text" value={province} onChange={(e) => setProvince(e.target.value)} />
-                </div>
-                <div className="form-group">
-                  <label>DISTRITO</label>
-                  <input type="text" value={district} onChange={(e) => setDistrict(e.target.value)} />
-                </div>
-              </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div className="form-group">
-                  <label>ESTADO CIVIL</label>
-                  <select value={civilStatus} onChange={(e) => setCivilStatus(e.target.value)}>
-                    <option value="SOLTERO">SOLTERO(A)</option>
-                    <option value="CASADO">CASADO(A)</option>
-                    <option value="DIVORCIADO">DIVORCIADO(A)</option>
-                    <option value="VIUDO">VIUDO(A)</option>
-                  </select>
+                  <label>DIRECCIÓN COMPLETA</label>
+                  <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
                 </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                  <div className="form-group">
+                    <label>DEPARTAMENTO</label>
+                    <input type="text" value={department} onChange={(e) => setDepartment(e.target.value)} />
+                  </div>
+                  <div className="form-group">
+                    <label>PROVINCIA</label>
+                    <input type="text" value={province} onChange={(e) => setProvince(e.target.value)} />
+                  </div>
+                  <div className="form-group">
+                    <label>DISTRITO</label>
+                    <input type="text" value={district} onChange={(e) => setDistrict(e.target.value)} />
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className="form-group">
+                    <label>ESTADO CIVIL</label>
+                    <select value={civilStatus} onChange={(e) => setCivilStatus(e.target.value)}>
+                      <option value="SOLTERO">SOLTERO(A)</option>
+                      <option value="CASADO">CASADO(A)</option>
+                      <option value="DIVORCIADO">DIVORCIADO(A)</option>
+                      <option value="VIUDO">VIUDO(A)</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>NACIONALIDAD *</label>
+                    <input type="text" value={nationality} onChange={(e) => setNationality(e.target.value)} required />
+                  </div>
+                </div>
+
+                {/* DNI Upload Fields (only shown if not readOnly) */}
+                {permission !== 'read' && (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', border: '1px dashed var(--border-color)', padding: '16px', borderRadius: '12px', background: 'var(--bg-sidebar)' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <label style={{ fontSize: '0.75rem', display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontWeight: '600' }}>DNI ANVERSO (FRENTE)</label>
+                      <input type="file" id="dni-front-file" accept="image/*" onChange={handleDniFrontChange} style={{ display: 'none' }} />
+                      <label htmlFor="dni-front-file" className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.75rem', cursor: 'pointer' }}>Elegir Foto</label>
+                      {dniFrontFile && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>{dniFrontFile.name}</div>}
+                      {!dniFrontFile && dniFrontUrl && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>✓ Foto cargada</div>}
+                    </div>
+                    
+                    <div style={{ textAlign: 'center' }}>
+                      <label style={{ fontSize: '0.75rem', display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontWeight: '600' }}>DNI REVERSO (ATRÁS)</label>
+                      <input type="file" id="dni-back-file" accept="image/*" onChange={handleDniBackChange} style={{ display: 'none' }} />
+                      <label htmlFor="dni-back-file" className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.75rem', cursor: 'pointer' }}>Elegir Foto</label>
+                      {dniBackFile && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>{dniBackFile.name}</div>}
+                      {!dniBackFile && dniBackUrl && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>✓ Foto cargada</div>}
+                    </div>
+                  </div>
+                )}
+
                 <div className="form-group">
-                  <label>NACIONALIDAD *</label>
-                  <input type="text" value={nationality} onChange={(e) => setNationality(e.target.value)} required />
+                  <label>OBSERVACIONES</label>
+                  <textarea rows={2} value={obs} onChange={(e) => setObs(e.target.value)} />
                 </div>
-              </div>
-
-              {/* DNI Upload Fields */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', border: '1px dashed var(--border-color)', padding: '16px', borderRadius: '12px', background: 'var(--bg-sidebar)' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <label style={{ fontSize: '0.75rem', display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontWeight: '600' }}>DNI ANVERSO (FRENTE)</label>
-                  <input type="file" id="dni-front-file" accept="image/*" onChange={handleDniFrontChange} style={{ display: 'none' }} />
-                  <label htmlFor="dni-front-file" className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.75rem', cursor: 'pointer' }}>Elegir Foto</label>
-                  {dniFrontFile && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>{dniFrontFile.name}</div>}
-                  {!dniFrontFile && dniFrontUrl && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>✓ Foto cargada</div>}
-                </div>
-                
-                <div style={{ textAlign: 'center' }}>
-                  <label style={{ fontSize: '0.75rem', display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontWeight: '600' }}>DNI REVERSO (ATRÁS)</label>
-                  <input type="file" id="dni-back-file" accept="image/*" onChange={handleDniBackChange} style={{ display: 'none' }} />
-                  <label htmlFor="dni-back-file" className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.75rem', cursor: 'pointer' }}>Elegir Foto</label>
-                  {dniBackFile && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>{dniBackFile.name}</div>}
-                  {!dniBackFile && dniBackUrl && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>✓ Foto cargada</div>}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>OBSERVACIONES</label>
-                <textarea rows={2} value={obs} onChange={(e) => setObs(e.target.value)} />
-              </div>
+              </fieldset>
 
               <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
                 <button type="button" className="btn-secondary" onClick={() => setShowModal(false)} style={{ flexGrow: 1 }} disabled={loading}>
-                  Cancelar
+                  {permission === 'read' ? 'Cerrar' : 'Cancelar'}
                 </button>
-                <button type="submit" className="btn-primary" style={{ flexGrow: 1 }} disabled={loading}>
-                  {loading ? 'Guardando...' : editingClient ? 'Guardar Cambios' : 'Guardar Cliente'}
-                </button>
+                {permission !== 'read' && (
+                  <button type="submit" className="btn-primary" style={{ flexGrow: 1 }} disabled={loading}>
+                    {loading ? 'Guardando...' : editingClient ? 'Guardar Cambios' : 'Guardar Cliente'}
+                  </button>
+                )}
               </div>
             </form>
           </div>
@@ -368,7 +376,7 @@ export default function ClientesView({ supabase, session, clients, onRefreshData
                 </td>
                 <td>
                   <button className="btn-secondary" onClick={() => handleOpenEdit(client)} style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
-                    ✏️ Editar
+                    {permission === 'read' ? '👁️ Ver' : '✏️ Editar'}
                   </button>
                 </td>
               </tr>

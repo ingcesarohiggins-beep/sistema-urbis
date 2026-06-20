@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { logActivity } from '../utils/activityLogger';
 
-export default function ProjectsView({ supabase, session, onRefreshData }) {
+export default function ProjectsView({ supabase, session, onRefreshData, currentRole = 'admin', projectAssignments = [] }) {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -36,6 +36,10 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
   
   // UI States
   const [expandedProjectId, setExpandedProjectId] = useState(null);
+
+  const displayedProjects = currentRole === 'admin'
+    ? projects
+    : projects.filter(p => projectAssignments.some(a => a.project_id === p.id));
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -260,7 +264,7 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
           <h1 style={{ margin: 0, fontSize: '2rem' }}>Proyectos Inmobiliarios</h1>
           <p style={{ color: 'var(--text-muted)', margin: '4px 0 0 0' }}>Gestione las urbanizaciones, titulares y plantillas de contrato</p>
         </div>
-        {session && (
+        {currentRole === 'admin' && session && (
           <button className="btn-primary" onClick={handleOpenCreate}>
             + Nuevo Proyecto
           </button>
@@ -270,13 +274,13 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
       {loading && <div style={{ textAlign: 'center', padding: '40px' }}><div className="loading-spinner" style={{ display: 'inline-block' }}></div></div>}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
-        {!loading && projects.length === 0 && (
+        {!loading && displayedProjects.length === 0 && (
           <div className="glass-panel" style={{ gridColumn: '1/-1', padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             No hay proyectos registrados. Comience creando uno.
           </div>
         )}
 
-        {projects.map((project) => (
+        {displayedProjects.map((project) => (
           <div className="glass-panel" key={project.id} style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }}>
             {project.photo_url ? (
               <img src={project.photo_url} alt={project.name} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
@@ -330,12 +334,16 @@ export default function ProjectsView({ supabase, session, onRefreshData }) {
                     ℹ️ Info
                   </a>
                 )}
-                <button className="btn-secondary" onClick={() => handleOpenEdit(project)} style={{ padding: '6px 12px', fontSize: '0.75rem' }}>
-                  ✏️ Editar
-                </button>
-                <button className="btn-secondary" onClick={() => handleDelete(project)} style={{ padding: '6px 12px', fontSize: '0.75rem', color: 'hsl(350, 85%, 65%)' }}>
-                  🗑️ Eliminar
-                </button>
+                {currentRole === 'admin' && (
+                  <>
+                    <button className="btn-secondary" onClick={() => handleOpenEdit(project)} style={{ padding: '6px 12px', fontSize: '0.75rem' }}>
+                      ✏️ Editar
+                    </button>
+                    <button className="btn-secondary" onClick={() => handleDelete(project)} style={{ padding: '6px 12px', fontSize: '0.75rem', color: 'hsl(350, 85%, 65%)' }}>
+                      🗑️ Eliminar
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { logActivity } from '../utils/activityLogger';
 
-export default function IngresosForm({ supabase, session, selectedProject, lots, clients, financialAccounts, onRefreshData }) {
+export default function IngresosForm({ supabase, session, selectedProject, lots, clients, financialAccounts, onRefreshData, permission = 'full' }) {
   const [loading, setLoading] = useState(false);
   
   // Option A (Separación) vs Option B (Pago)
@@ -511,6 +511,12 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
         <p style={{ color: 'var(--text-muted)', margin: '4px 0 0 0' }}>Bandeja de ingresos del proyecto: <strong style={{ color: 'var(--primary)' }}>{selectedProject.name}</strong></p>
       </div>
 
+      {permission === 'read' && (
+        <div className="glass-panel" style={{ padding: '16px', background: 'hsla(45, 100%, 50%, 0.1)', border: '1px solid hsla(45, 100%, 50%, 0.3)', color: 'hsl(45, 100%, 75%)', borderRadius: '10px', marginBottom: '24px', fontSize: '0.85rem' }}>
+          <strong>⚠️ Modo Lectura:</strong> No tiene permisos para registrar o modificar transacciones de ingresos.
+        </div>
+      )}
+
       {/* Mode Selector Tab */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
         <button 
@@ -531,141 +537,148 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
 
       <div className="glass-panel" style={{ padding: '32px' }}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          
-          {/* Lot Selector */}
-          <div className="form-group">
-            <label>SELECCIONAR LOTE *</label>
-            <select value={selectedLotId} onChange={(e) => setSelectedLotId(e.target.value)} required>
-              <option value="">-- Seleccione un Lote --</option>
-              {eligibleLots.map(l => (
-                <option key={l.id} value={l.id}>
-                  MZ {l.mz} LT {l.lt} (Estado: {l.status})
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Client Search/Select */}
-          <div className="form-group">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <label style={{ margin: 0 }}>ASIGNAR COMPRADOR *</label>
-              {formMode === 'separacion' && (
-                <button type="button" className="btn-secondary" onClick={() => setShowClientModal(true)} style={{ padding: '4px 8px', fontSize: '0.7rem' }}>
-                  + Crear Cliente Inline
-                </button>
-              )}
-            </div>
-            
-            {formMode === 'separacion' ? (
-              <select value={selectedClientId} onChange={(e) => setSelectedClientId(e.target.value)} required>
-                <option value="">-- Seleccione Comprador --</option>
-                {clients.map(c => (
-                  <option key={c.dni} value={c.dni}>{c.names} (DNI: {c.dni})</option>
+          <fieldset disabled={permission === 'read'} style={{ border: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Lot Selector */}
+            <div className="form-group">
+              <label>SELECCIONAR LOTE *</label>
+              <select value={selectedLotId} onChange={(e) => setSelectedLotId(e.target.value)} required>
+                <option value="">-- Seleccione un Lote --</option>
+                {eligibleLots.map(l => (
+                  <option key={l.id} value={l.id}>
+                    MZ {l.mz} LT {l.lt} (Estado: {l.status})
+                  </option>
                 ))}
               </select>
-            ) : (
-              <input 
-                type="text" 
-                value={
-                  selectedClientId 
-                    ? (clients.find(c => c.dni === selectedClientId)?.names || 'Buscando comprador...')
-                    : 'Seleccione un lote para autocompletar cliente...'
-                } 
-                disabled 
-              />
-            )}
-          </div>
+            </div>
 
-          {/* Sub-type Selection for Payments */}
-          {formMode === 'pago' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '16px', background: 'var(--bg-sidebar)', padding: '16px', borderRadius: '8px' }}>
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label>SUB-TIPO DE PAGO</label>
-                <select value={pagoSubType} onChange={(e) => setPagoSubType(e.target.value)}>
-                  <option value="inicial">Pago Inicial (Creará la venta)</option>
-                  <option value="cuota">Cuota Mensual (Amortización)</option>
+            {/* Client Search/Select */}
+            <div className="form-group">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <label style={{ margin: 0 }}>ASIGNAR COMPRADOR *</label>
+                {formMode === 'separacion' && permission !== 'read' && (
+                  <button type="button" className="btn-secondary" onClick={() => setShowClientModal(true)} style={{ padding: '4px 8px', fontSize: '0.7rem' }}>
+                    + Crear Cliente Inline
+                  </button>
+                )}
+              </div>
+              
+              {formMode === 'separacion' ? (
+                <select value={selectedClientId} onChange={(e) => setSelectedClientId(e.target.value)} required>
+                  <option value="">-- Seleccione Comprador --</option>
+                  {clients.map(c => (
+                    <option key={c.dni} value={c.dni}>{c.names} (DNI: {c.dni})</option>
+                  ))}
+                </select>
+              ) : (
+                <input 
+                  type="text" 
+                  value={
+                    selectedClientId 
+                      ? (clients.find(c => c.dni === selectedClientId)?.names || 'Buscando comprador...')
+                      : 'Seleccione un lote para autocompletar cliente...'
+                  } 
+                  disabled 
+                />
+              )}
+            </div>
+
+            {/* Sub-type Selection for Payments */}
+            {formMode === 'pago' && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '16px', background: 'var(--bg-sidebar)', padding: '16px', borderRadius: '8px' }}>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label>SUB-TIPO DE PAGO</label>
+                  <select value={pagoSubType} onChange={(e) => setPagoSubType(e.target.value)}>
+                    <option value="inicial">Pago Inicial (Creará la venta)</option>
+                    <option value="cuota">Cuota Mensual (Amortización)</option>
+                  </select>
+                </div>
+                
+                {pagoSubType === 'inicial' && (
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <label>NÚMERO DE CUOTAS A FINANCIAR</label>
+                    <input 
+                      type="number" 
+                      value={installmentsCount} 
+                      onChange={(e) => setInstallmentsCount(parseInt(e.target.value) || 48)} 
+                      min={1} 
+                      max={120} 
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Payment Details */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="form-group">
+                <label>MONTO DEL PAGO (S/.) *</label>
+                <input type="number" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" required />
+              </div>
+              <div className="form-group">
+                <label>FECHA DE TRANSACCIÓN *</label>
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="form-group">
+                <label>TIPO DE OPERACIÓN</label>
+                <select value={opType} onChange={(e) => setOpType(e.target.value)}>
+                  <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                  <option value="DEPOSITO">DEPÓSITO BANCARIO</option>
+                  <option value="EFECTIVO">EFECTIVO EN CAJA</option>
                 </select>
               </div>
               
-              {pagoSubType === 'inicial' && (
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label>NÚMERO DE CUOTAS A FINANCIAR</label>
-                  <input 
-                    type="number" 
-                    value={installmentsCount} 
-                    onChange={(e) => setInstallmentsCount(parseInt(e.target.value) || 48)} 
-                    min={1} 
-                    max={120} 
-                  />
+              <div className="form-group">
+                <label>NÚMERO DE OPERACIÓN *</label>
+                <input type="text" value={opNum} onChange={(e) => setOpNum(e.target.value)} placeholder="Ej: 002345" required />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>CUENTA RECEPTORA *</label>
+              <select value={accId} onChange={(e) => setAccId(e.target.value)} required>
+                <option value="">-- Elija la cuenta receptor --</option>
+                {projectAccounts.map(acc => (
+                  <option key={acc.id} value={acc.id}>
+                    {acc.name} ({acc.account_number}) - {acc.holder_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Voucher Upload */}
+            <div style={{ border: '1px dashed var(--border-color)', borderRadius: '12px', padding: '24px', textAlign: 'center', background: 'var(--bg-sidebar)' }}>
+              <label style={{ fontSize: '0.875rem', display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontWeight: '600' }}>
+                FOTO O CAPTURA DE VOUCHER *
+              </label>
+              <input type="file" id="voucher-file-input" accept="image/*" onChange={handleVoucherChange} style={{ display: 'none' }} />
+              {permission !== 'read' ? (
+                <label htmlFor="voucher-file-input" className="btn-primary" style={{ fontSize: '0.8rem', cursor: 'pointer', padding: '8px 16px' }}>
+                  Cargar Imagen
+                </label>
+              ) : (
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>Subida de archivos deshabilitada en modo lectura</span>
+              )}
+              {voucherFile && (
+                <div style={{ color: 'var(--primary)', fontSize: '0.8rem', marginTop: '12px', fontWeight: '500' }}>
+                  ✓ Archivo listo: {voucherFile.name}
                 </div>
               )}
             </div>
+
+            <div className="form-group">
+              <label>OBSERVACIONES</label>
+              <textarea rows={2} value={obs} onChange={(e) => setObs(e.target.value)} placeholder="Detalles de la transferencia..." />
+            </div>
+          </fieldset>
+
+          {permission !== 'read' && (
+            <button type="submit" className="btn-primary" style={{ padding: '14px', fontSize: '1rem', marginTop: '10px' }} disabled={loading}>
+              {loading ? 'Procesando abono...' : 'Registrar Pago'}
+            </button>
           )}
-
-          {/* Payment Details */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div className="form-group">
-              <label>MONTO DEL PAGO (S/.) *</label>
-              <input type="number" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" required />
-            </div>
-            <div className="form-group">
-              <label>FECHA DE TRANSACCIÓN *</label>
-              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div className="form-group">
-              <label>TIPO DE OPERACIÓN</label>
-              <select value={opType} onChange={(e) => setOpType(e.target.value)}>
-                <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                <option value="DEPOSITO">DEPÓSITO BANCARIO</option>
-                <option value="EFECTIVO">EFECTIVO EN CAJA</option>
-              </select>
-            </div>
-            
-            <div className="form-group">
-              <label>NÚMERO DE OPERACIÓN *</label>
-              <input type="text" value={opNum} onChange={(e) => setOpNum(e.target.value)} placeholder="Ej: 002345" required />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>CUENTA RECEPTORA *</label>
-            <select value={accId} onChange={(e) => setAccId(e.target.value)} required>
-              <option value="">-- Elija la cuenta receptor --</option>
-              {projectAccounts.map(acc => (
-                <option key={acc.id} value={acc.id}>
-                  {acc.name} ({acc.account_number}) - {acc.holder_name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Voucher Upload */}
-          <div style={{ border: '1px dashed var(--border-color)', borderRadius: '12px', padding: '24px', textAlign: 'center', background: 'var(--bg-sidebar)' }}>
-            <label style={{ fontSize: '0.875rem', display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontWeight: '600' }}>
-              FOTO O CAPTURA DE VOUCHER *
-            </label>
-            <input type="file" id="voucher-file-input" accept="image/*" onChange={handleVoucherChange} style={{ display: 'none' }} />
-            <label htmlFor="voucher-file-input" className="btn-primary" style={{ fontSize: '0.8rem', cursor: 'pointer', padding: '8px 16px' }}>
-              Cargar Imagen
-            </label>
-            {voucherFile && (
-              <div style={{ color: 'var(--primary)', fontSize: '0.8rem', marginTop: '12px', fontWeight: '500' }}>
-                ✓ Archivo listo: {voucherFile.name}
-              </div>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label>OBSERVACIONES</label>
-            <textarea rows={2} value={obs} onChange={(e) => setObs(e.target.value)} placeholder="Detalles de la transferencia..." />
-          </div>
-
-          <button type="submit" className="btn-primary" style={{ padding: '14px', fontSize: '1rem', marginTop: '10px' }} disabled={loading}>
-            {loading ? 'Procesando abono...' : 'Registrar Pago'}
-          </button>
 
         </form>
       </div>

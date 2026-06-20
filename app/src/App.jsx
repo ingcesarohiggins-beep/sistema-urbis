@@ -16,6 +16,7 @@ import ProjectsView from './components/ProjectsView';
 import CuentasView from './components/CuentasView';
 import ActivityLogView from './components/ActivityLogView';
 import ContratosView from './components/ContratosView';
+import UsuariosView from './components/UsuariosView';
 
 export default function App() {
   // ==========================================
@@ -47,6 +48,16 @@ export default function App() {
 
   // Derive role from profile (fallback to 'secretary')
   const currentRole = userProfile?.role || 'secretary';
+
+  const getModulePermission = (moduleKey) => {
+    if (currentRole === 'admin') return 'full';
+    if (!userProfile?.permissions) return 'full'; // Default to full for compatibility
+    return userProfile.permissions[moduleKey] || 'none';
+  };
+
+  const visibleProjects = currentRole === 'admin'
+    ? projects
+    : projects.filter(p => projectAssignments.some(a => a.project_id === p.id));
 
   const handleRefreshData = () => {
     setRefreshTrigger(prev => prev + 1);
@@ -118,11 +129,13 @@ export default function App() {
     fetchProfile();
   }, [session]);
 
+  const [projectAssignments, setProjectAssignments] = useState([]);
+
   // ==========================================
-  // FETCH ALL DATA (when authenticated)
+  // FETCH ALL DATA (when authenticated and profile loaded)
   // ==========================================
   useEffect(() => {
-    if (!supabase || !session) return;
+    if (!supabase || !session || !userProfile) return;
 
     const fetchAllData = async () => {
       setDataLoading(true);
@@ -138,6 +151,7 @@ export default function App() {
           dailyIncomeRes,
           expensesRes,
           accountsRes,
+          assignmentsRes,
         ] = await Promise.all([
           supabase.from('projects').select('*').order('name'),
           supabase.from('lots').select('*').order('mz').order('lt'),
@@ -147,6 +161,7 @@ export default function App() {
           supabase.from('daily_income').select('*').order('date', { ascending: false }),
           supabase.from('expenses').select('*').order('issue_date', { ascending: false }),
           supabase.from('financial_accounts').select('*').order('name'),
+          supabase.from('project_assignments').select('*').eq('user_id', session.user.id),
         ]);
 
         const errors = [
@@ -157,7 +172,8 @@ export default function App() {
           installmentsRes.error,
           dailyIncomeRes.error,
           expensesRes.error,
-          accountsRes.error
+          accountsRes.error,
+          assignmentsRes.error
         ].filter(Boolean);
 
         if (errors.length > 0) {
@@ -165,15 +181,24 @@ export default function App() {
           setFetchError("Error al sincronizar tablas: " + errors.map(e => `${e.message} (Código ${e.code || ''})`).join(", "));
         }
 
+        if (assignmentsRes.data) {
+          setProjectAssignments(assignmentsRes.data);
+        }
+
+        const role = userProfile?.role || 'secretary';
+        const allowedProjects = role === 'admin'
+          ? (projectsRes.data || [])
+          : (projectsRes.data || []).filter(p => (assignmentsRes.data || []).some(a => a.project_id === p.id));
+
         if (projectsRes.data) {
           setProjects(projectsRes.data);
-          // Set selected project default if none selected or if not in projects list anymore
-          if (projectsRes.data.length > 0) {
+          // Set selected project default if none selected or if not in allowed list anymore
+          if (allowedProjects.length > 0) {
             setSelectedProject(prev => {
-              if (prev && projectsRes.data.find(p => p.id === prev.id)) {
-                return projectsRes.data.find(p => p.id === prev.id);
+              if (prev && allowedProjects.find(p => p.id === prev.id)) {
+                return allowedProjects.find(p => p.id === prev.id);
               }
-              return projectsRes.data[0];
+              return allowedProjects[0];
             });
           } else {
             setSelectedProject(null);
@@ -197,7 +222,7 @@ export default function App() {
     };
 
     fetchAllData();
-  }, [session, refreshTrigger]);
+  }, [session, userProfile, refreshTrigger]);
 
   // ==========================================
   // PENDING INCOMES COUNT
@@ -331,21 +356,25 @@ export default function App() {
         </div>
 
         {/* Project Selector */}
-        {projects.length > 0 && (
+        {visibleProjects.length > 0 ? (
           <div style={{ marginBottom: '24px', padding: '0 4px' }}>
             <label style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '700', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>PROYECTO ACTIVO</label>
             <select
               value={selectedProject?.id || ''}
               onChange={(e) => {
-                const proj = projects.find(p => p.id === e.target.value);
+                const proj = visibleProjects.find(p => p.id === e.target.value);
                 setSelectedProject(proj || null);
               }}
               style={{ width: '100%', padding: '10px', fontSize: '0.85rem', borderRadius: '8px', background: 'var(--bg-main)', border: '1px solid var(--border-color)', color: 'var(--text-main)', cursor: 'pointer' }}
             >
-              {projects.map(p => (
+              {visibleProjects.map(p => (
                 <option key={p.id} value={p.id}>{p.name}</option>
               ))}
             </select>
+          </div>
+        ) : (
+          <div style={{ marginBottom: '24px', padding: '10px 4px', fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+            ⚠️ Sin proyectos asignados
           </div>
         )}
 
@@ -367,32 +396,38 @@ export default function App() {
             📊 Resumen General
           </button>
 
-          <button
-            className={`btn-secondary ${activeView === 'lotes' ? 'active-nav' : ''}`}
-            onClick={() => { setActiveView('lotes'); setSidebarOpen(false); }}
-            style={{ justifyContent: 'flex-start' }}
-          >
-            🗺️ Lotes de Terreno
-          </button>
+          {getModulePermission('lotes') !== 'none' && (
+            <button
+              className={`btn-secondary ${activeView === 'lotes' ? 'active-nav' : ''}`}
+              onClick={() => { setActiveView('lotes'); setSidebarOpen(false); }}
+              style={{ justifyContent: 'flex-start' }}
+            >
+              🗺️ Lotes de Terreno
+            </button>
+          )}
 
-          <button
-            className={`btn-secondary ${activeView === 'clientes' ? 'active-nav' : ''}`}
-            onClick={() => { setActiveView('clientes'); setSidebarOpen(false); }}
-            style={{ justifyContent: 'flex-start' }}
-          >
-            👥 Ficha Clientes
-          </button>
+          {getModulePermission('clientes') !== 'none' && (
+            <button
+              className={`btn-secondary ${activeView === 'clientes' ? 'active-nav' : ''}`}
+              onClick={() => { setActiveView('clientes'); setSidebarOpen(false); }}
+              style={{ justifyContent: 'flex-start' }}
+            >
+              👥 Ficha Clientes
+            </button>
+          )}
 
-          <button
-            className={`btn-secondary ${activeView === 'contratos' ? 'active-nav' : ''}`}
-            onClick={() => { setActiveView('contratos'); setSidebarOpen(false); }}
-            style={{ justifyContent: 'flex-start' }}
-          >
-            📄 Contratos
-          </button>
+          {getModulePermission('contratos') !== 'none' && (
+            <button
+              className={`btn-secondary ${activeView === 'contratos' ? 'active-nav' : ''}`}
+              onClick={() => { setActiveView('contratos'); setSidebarOpen(false); }}
+              style={{ justifyContent: 'flex-start' }}
+            >
+              📄 Contratos
+            </button>
+          )}
 
-           {/* Secretary & Admin view payment form */}
-          {currentRole !== 'manager' && (
+          {/* Secretary & Admin view payment form */}
+          {currentRole !== 'manager' && getModulePermission('ingresos') !== 'none' && (
             <button
               className={`btn-secondary ${activeView === 'ingresos' ? 'active-nav' : ''}`}
               onClick={() => { setActiveView('ingresos'); setSidebarOpen(false); }}
@@ -421,21 +456,36 @@ export default function App() {
             </button>
           )}
 
-          <button
-            className={`btn-secondary ${activeView === 'gastos' ? 'active-nav' : ''}`}
-            onClick={() => { setActiveView('gastos'); setSidebarOpen(false); }}
-            style={{ justifyContent: 'flex-start' }}
-          >
-            💸 Gastos Generales
-          </button>
+          {getModulePermission('gastos') !== 'none' && (
+            <button
+              className={`btn-secondary ${activeView === 'gastos' ? 'active-nav' : ''}`}
+              onClick={() => { setActiveView('gastos'); setSidebarOpen(false); }}
+              style={{ justifyContent: 'flex-start' }}
+            >
+              💸 Gastos Generales
+            </button>
+          )}
 
-          <button
-            className={`btn-secondary ${activeView === 'cuentas' ? 'active-nav' : ''}`}
-            onClick={() => { setActiveView('cuentas'); setSidebarOpen(false); }}
-            style={{ justifyContent: 'flex-start' }}
-          >
-            💳 Cuentas Bancarias
-          </button>
+          {getModulePermission('cuentas') !== 'none' && (
+            <button
+              className={`btn-secondary ${activeView === 'cuentas' ? 'active-nav' : ''}`}
+              onClick={() => { setActiveView('cuentas'); setSidebarOpen(false); }}
+              style={{ justifyContent: 'flex-start' }}
+            >
+              💳 Cuentas Bancarias
+            </button>
+          )}
+
+          {/* Admin only user management view */}
+          {currentRole === 'admin' && (
+            <button
+              className={`btn-secondary ${activeView === 'usuarios' ? 'active-nav' : ''}`}
+              onClick={() => { setActiveView('usuarios'); setSidebarOpen(false); }}
+              style={{ justifyContent: 'flex-start' }}
+            >
+              👥 Gestión Usuarios
+            </button>
+          )}
 
           {/* Admin only log view */}
           {currentRole === 'admin' && (
@@ -487,6 +537,8 @@ export default function App() {
             supabase={supabase}
             session={session}
             onRefreshData={handleRefreshData}
+            currentRole={currentRole}
+            projectAssignments={projectAssignments}
           />
         )}
 
@@ -500,7 +552,7 @@ export default function App() {
           />
         )}
 
-        {activeView === 'lotes' && (
+        {activeView === 'lotes' && getModulePermission('lotes') !== 'none' && (
           <LotesView
             supabase={supabase}
             session={session}
@@ -511,19 +563,21 @@ export default function App() {
             installments={installments}
             dailyIncome={dailyIncome}
             onRefreshData={handleRefreshData}
+            permission={getModulePermission('lotes')}
           />
         )}
 
-        {activeView === 'clientes' && (
+        {activeView === 'clientes' && getModulePermission('clientes') !== 'none' && (
           <ClientesView
             supabase={supabase}
             session={session}
             clients={clients}
             onRefreshData={handleRefreshData}
+            permission={getModulePermission('clientes')}
           />
         )}
 
-        {activeView === 'contratos' && (
+        {activeView === 'contratos' && getModulePermission('contratos') !== 'none' && (
           <ContratosView
             supabase={supabase}
             session={session}
@@ -533,10 +587,11 @@ export default function App() {
             sales={sales}
             installments={installments}
             onRefreshData={handleRefreshData}
+            permission={getModulePermission('contratos')}
           />
         )}
 
-        {activeView === 'ingresos' && currentRole !== 'manager' && (
+        {activeView === 'ingresos' && currentRole !== 'manager' && getModulePermission('ingresos') !== 'none' && (
           <IngresosForm
             supabase={supabase}
             session={session}
@@ -545,6 +600,7 @@ export default function App() {
             clients={clients}
             financialAccounts={financialAccounts}
             onRefreshData={handleRefreshData}
+            permission={getModulePermission('ingresos')}
           />
         )}
 
@@ -560,21 +616,31 @@ export default function App() {
           />
         )}
 
-        {activeView === 'gastos' && (
+        {activeView === 'gastos' && getModulePermission('gastos') !== 'none' && (
           <GastosView
             supabase={supabase}
             session={session}
             selectedProject={selectedProject}
             expenses={expenses}
             onRefreshData={handleRefreshData}
+            permission={getModulePermission('gastos')}
           />
         )}
 
-        {activeView === 'cuentas' && (
+        {activeView === 'cuentas' && getModulePermission('cuentas') !== 'none' && (
           <CuentasView
             supabase={supabase}
             session={session}
             selectedProject={selectedProject}
+            permission={getModulePermission('cuentas')}
+          />
+        )}
+
+        {activeView === 'usuarios' && currentRole === 'admin' && (
+          <UsuariosView
+            supabase={supabase}
+            session={session}
+            onRefreshData={handleRefreshData}
           />
         )}
 

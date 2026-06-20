@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { logActivity } from '../utils/activityLogger';
 
-export default function CuentasView({ supabase, session, selectedProject }) {
+export default function CuentasView({ supabase, session, selectedProject, permission = 'full' }) {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -167,9 +167,11 @@ export default function CuentasView({ supabase, session, selectedProject }) {
             Gestionar cuentas del proyecto: <strong style={{ color: 'var(--primary)' }}>{selectedProject.name}</strong>
           </p>
         </div>
-        <button className="btn-primary" onClick={handleOpenCreate}>
-          + Registrar Nueva Cuenta
-        </button>
+        {permission !== 'read' && (
+          <button className="btn-primary" onClick={handleOpenCreate}>
+            + Registrar Nueva Cuenta
+          </button>
+        )}
       </div>
 
       {loading && <div style={{ textAlign: 'center', padding: '40px' }}><div className="loading-spinner" style={{ display: 'inline-block' }}></div></div>}
@@ -205,12 +207,20 @@ export default function CuentasView({ supabase, session, selectedProject }) {
                 <td>{account.holder_name}</td>
                 <td>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <button className="btn-secondary" onClick={() => handleOpenEdit(account)} style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
-                      Editar
-                    </button>
-                    <button className="btn-secondary" onClick={() => handleDelete(account)} style={{ padding: '4px 8px', fontSize: '0.75rem', color: 'hsl(350, 85%, 65%)' }}>
-                      Eliminar
-                    </button>
+                    {permission !== 'read' ? (
+                      <>
+                        <button className="btn-secondary" onClick={() => handleOpenEdit(account)} style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
+                          Editar
+                        </button>
+                        <button className="btn-secondary" onClick={() => handleDelete(account)} style={{ padding: '4px 8px', fontSize: '0.75rem', color: 'hsl(350, 85%, 65%)' }}>
+                          Eliminar
+                        </button>
+                      </>
+                    ) : (
+                      <button className="btn-secondary" onClick={() => handleOpenEdit(account)} style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
+                        👁️ Ver
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -224,37 +234,40 @@ export default function CuentasView({ supabase, session, selectedProject }) {
           <div className="glass-panel" style={{ width: '500px', padding: '32px' }}>
             <h2 style={{ margin: '0 0 20px 0', fontFamily: 'Outfit' }}>{editingAccount ? 'Editar Cuenta' : 'Registrar Nueva Cuenta'}</h2>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              
-              <div className="form-group">
-                <label>NOMBRE BANCO / ENTIDAD *</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="BCP, Interbank, Yape, Plin" required />
-              </div>
+              <fieldset disabled={permission === 'read'} style={{ border: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div className="form-group">
+                  <label>NOMBRE BANCO / ENTIDAD *</label>
+                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="BCP, Interbank, Yape, Plin" required />
+                </div>
 
-              <div className="form-group">
-                <label>TIPO DE CUENTA *</label>
-                <select value={type} onChange={(e) => setType(e.target.value)}>
-                  <option value="bank">Cuenta Bancaria</option>
-                  <option value="digital_wallet">Billetera Digital</option>
-                </select>
-              </div>
+                <div className="form-group">
+                  <label>TIPO DE CUENTA *</label>
+                  <select value={type} onChange={(e) => setType(e.target.value)}>
+                    <option value="bank">Cuenta Bancaria</option>
+                    <option value="digital_wallet">Billetera Digital</option>
+                  </select>
+                </div>
 
-              <div className="form-group">
-                <label>NÚMERO DE CUENTA / CELULAR *</label>
-                <input type="text" value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} required />
-              </div>
+                <div className="form-group">
+                  <label>NÚMERO DE CUOTA / CELULAR *</label>
+                  <input type="text" value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} required />
+                </div>
 
-              <div className="form-group">
-                <label>NOMBRE DEL TITULAR *</label>
-                <input type="text" value={holderName} onChange={(e) => setHolderName(e.target.value)} required />
-              </div>
+                <div className="form-group">
+                  <label>NOMBRE DEL TITULAR *</label>
+                  <input type="text" value={holderName} onChange={(e) => setHolderName(e.target.value)} required />
+                </div>
+              </fieldset>
 
               <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
                 <button type="button" className="btn-secondary" onClick={() => setShowModal(false)} style={{ flexGrow: 1 }} disabled={loading}>
-                  Cancelar
+                  {permission === 'read' ? 'Cerrar' : 'Cancelar'}
                 </button>
-                <button type="submit" className="btn-primary" style={{ flexGrow: 1 }} disabled={loading}>
-                  {loading ? 'Guardando...' : editingAccount ? 'Guardar Cambios' : 'Registrar'}
-                </button>
+                {permission !== 'read' && (
+                  <button type="submit" className="btn-primary" style={{ flexGrow: 1 }} disabled={loading}>
+                    {loading ? 'Guardando...' : editingAccount ? 'Guardar Cambios' : 'Registrar'}
+                  </button>
+                )}
               </div>
             </form>
           </div>

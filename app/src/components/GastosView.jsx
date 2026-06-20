@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { logActivity } from '../utils/activityLogger';
 
-export default function GastosView({ supabase, session, selectedProject, expenses, onRefreshData }) {
+export default function GastosView({ supabase, session, selectedProject, expenses, onRefreshData, permission = 'full' }) {
   const [showModal, setShowModal] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -198,9 +198,11 @@ export default function GastosView({ supabase, session, selectedProject, expense
             Proyecto seleccionado: <strong style={{ color: 'var(--primary)' }}>{selectedProject.name}</strong>
           </p>
         </div>
-        <button className="btn-primary" onClick={handleOpenCreate}>
-          + Registrar Egreso / Gasto
-        </button>
+        {permission !== 'read' && (
+          <button className="btn-primary" onClick={handleOpenCreate}>
+            + Registrar Egreso / Gasto
+          </button>
+        )}
       </div>
 
       {/* Search bar */}
@@ -223,106 +225,109 @@ export default function GastosView({ supabase, session, selectedProject, expense
           <div className="glass-panel" style={{ width: '550px', padding: '32px', maxHeight: '90vh', overflowY: 'auto' }}>
             <h2 style={{ margin: '0 0 20px 0', fontFamily: 'Outfit' }}>{editingExpense ? 'Editar Egreso / Gasto' : 'Registrar Egreso / Gasto'}</h2>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label>TIPO DE GASTO</label>
-                  <select value={type} onChange={(e) => setType(e.target.value)}>
-                    <option value="PAGO DE COMISION">PAGO DE COMISIÓN</option>
-                    <option value="GASTOS ADMINISTRATIVOS">GASTOS ADMINISTRATIVOS</option>
-                    <option value="SERVICIOS GENERALES">SERVICIOS GENERALES</option>
-                    <option value="PUBLICIDAD Y COMPRAS">PUBLICIDAD Y COMPRAS</option>
-                  </select>
+              <fieldset disabled={permission === 'read'} style={{ border: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className="form-group">
+                    <label>TIPO DE GASTO</label>
+                    <select value={type} onChange={(e) => setType(e.target.value)}>
+                      <option value="PAGO DE COMISION">PAGO DE COMISIÓN</option>
+                      <option value="GASTOS ADMINISTRATIVOS">GASTOS ADMINISTRATIVOS</option>
+                      <option value="SERVICIOS GENERALES">SERVICIOS GENERALES</option>
+                      <option value="PUBLICIDAD Y COMPRAS">PUBLICIDAD Y COMPRAS</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>MONTO DEL GASTO (S/.) *</label>
+                    <input type="number" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} required />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>MONTO DEL GASTO (S/.) *</label>
-                  <input type="number" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} required />
-                </div>
-              </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label>MES FISCAL</label>
-                  <select value={month} onChange={(e) => setMonth(e.target.value)}>
-                    <option value="Enero">Enero</option>
-                    <option value="Febrero">Febrero</option>
-                    <option value="Marzo">Marzo</option>
-                    <option value="Abril">Abril</option>
-                    <option value="Mayo">Mayo</option>
-                    <option value="Junio">Junio</option>
-                    <option value="Julio">Julio</option>
-                    <option value="Agosto">Agosto</option>
-                    <option value="Septiembre">Septiembre</option>
-                    <option value="Octubre">Octubre</option>
-                    <option value="Noviembre">Noviembre</option>
-                    <option value="Diciembre">Diciembre</option>
-                  </select>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className="form-group">
+                    <label>MES FISCAL</label>
+                    <select value={month} onChange={(e) => setMonth(e.target.value)}>
+                      <option value="Enero">Enero</option>
+                      <option value="Febrero">Febrero</option>
+                      <option value="Marzo">Marzo</option>
+                      <option value="Abril">Abril</option>
+                      <option value="Mayo">Mayo</option>
+                      <option value="Junio">Junio</option>
+                      <option value="Julio">Julio</option>
+                      <option value="Agosto">Agosto</option>
+                      <option value="Septiembre">Septiembre</option>
+                      <option value="Octubre">Octubre</option>
+                      <option value="Noviembre">Noviembre</option>
+                      <option value="Diciembre">Diciembre</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>AÑO FISCAL *</label>
+                    <input type="number" value={year} onChange={(e) => setYear(e.target.value)} required />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>AÑO FISCAL *</label>
-                  <input type="number" value={year} onChange={(e) => setYear(e.target.value)} required />
-                </div>
-              </div>
 
-              <div className="form-group">
-                <label>FECHA DE EMISIÓN *</label>
-                <input type="date" value={issueDate} onChange={(e) => setIssueDate(e.target.value)} required />
-              </div>
+                <div className="form-group">
+                  <label>FECHA DE EMISIÓN *</label>
+                  <input type="date" value={issueDate} onChange={(e) => setIssueDate(e.target.value)} required />
+                </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label>COMPROBANTE</label>
-                  <select value={docType} onChange={(e) => setDocType(e.target.value)}>
-                    <option value="RH">RECIBO POR HONORARIOS (RH)</option>
-                    <option value="BOLETA">BOLETA DE VENTA</option>
-                    <option value="FACTURA">FACTURA</option>
-                    <option value="VALE">VALE INTERNO</option>
-                  </select>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className="form-group">
+                    <label>COMPROBANTE</label>
+                    <select value={docType} onChange={(e) => setDocType(e.target.value)}>
+                      <option value="RH">RECIBO POR HONORARIOS (RH)</option>
+                      <option value="BOLETA">BOLETA DE VENTA</option>
+                      <option value="FACTURA">FACTURA</option>
+                      <option value="VALE">VALE INTERNO</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>NÚMERO COMPROBANTE</label>
+                    <input type="text" value={docNum} onChange={(e) => setDocNum(e.target.value)} placeholder="Ej: E001-442" />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>NÚMERO COMPROBANTE</label>
-                  <input type="text" value={docNum} onChange={(e) => setDocNum(e.target.value)} placeholder="Ej: E001-442" />
-                </div>
-              </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label>RECEPTOR DEL PAGO (A NOMBRE DE) *</label>
-                  <input type="text" value={recipient} onChange={(e) => setRecipient(e.target.value)} placeholder="Ej: Sergio Riega" required />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className="form-group">
+                    <label>RECEPTOR DEL PAGO (A NOMBRE DE) *</label>
+                    <input type="text" value={recipient} onChange={(e) => setRecipient(e.target.value)} placeholder="Ej: Sergio Riega" required />
+                  </div>
+                  <div className="form-group">
+                    <label>EMISOR DEL PAGO</label>
+                    <input type="text" value={sender} onChange={(e) => setSender(e.target.value)} />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>EMISOR DEL PAGO</label>
-                  <input type="text" value={sender} onChange={(e) => setSender(e.target.value)} />
-                </div>
-              </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label>COMPAÑÍA/EMPRESA</label>
-                  <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className="form-group">
+                    <label>COMPAÑÍA/EMPRESA</label>
+                    <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} />
+                  </div>
+                  <div className="form-group">
+                    <label>MÉTODO DE PAGO</label>
+                    <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+                      <option value="EFECTIVO">EFECTIVO</option>
+                      <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                      <option value="DEPOSITO">DEPÓSITO BANCARIO</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>MÉTODO DE PAGO</label>
-                  <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-                    <option value="EFECTIVO">EFECTIVO</option>
-                    <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                    <option value="DEPOSITO">DEPÓSITO BANCARIO</option>
-                  </select>
-                </div>
-              </div>
 
-              <div className="form-group">
-                <label>DESCRIPCIÓN / MOTIVO</label>
-                <textarea rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="Detalle por la compra de materiales o comisión de lote..." />
-              </div>
+                <div className="form-group">
+                  <label>DESCRIPCIÓN / MOTIVO</label>
+                  <textarea rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="Detalle por la compra de materiales o comisión de lote..." />
+                </div>
+              </fieldset>
 
               <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
                 <button type="button" className="btn-secondary" onClick={() => setShowModal(false)} style={{ flexGrow: 1 }} disabled={loading}>
-                  Cancelar
+                  {permission === 'read' ? 'Cerrar' : 'Cancelar'}
                 </button>
-                <button type="submit" className="btn-primary" style={{ flexGrow: 1 }} disabled={loading}>
-                  {loading ? 'Guardando...' : editingExpense ? 'Guardar Cambios' : 'Registrar Gasto'}
-                </button>
+                {permission !== 'read' && (
+                  <button type="submit" className="btn-primary" style={{ flexGrow: 1 }} disabled={loading}>
+                    {loading ? 'Guardando...' : editingExpense ? 'Guardar Cambios' : 'Registrar Gasto'}
+                  </button>
+                )}
               </div>
             </form>
           </div>
@@ -363,12 +368,20 @@ export default function GastosView({ supabase, session, selectedProject, expense
                 </td>
                 <td>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <button className="btn-secondary" onClick={() => handleOpenEdit(exp)} style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
-                      Editar
-                    </button>
-                    {isAdmin && (
-                      <button className="btn-secondary" onClick={() => handleDelete(exp)} style={{ padding: '4px 8px', fontSize: '0.75rem', color: 'hsl(350, 85%, 65%)' }}>
-                        Eliminar
+                    {permission !== 'read' ? (
+                      <>
+                        <button className="btn-secondary" onClick={() => handleOpenEdit(exp)} style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
+                          Editar
+                        </button>
+                        {isAdmin && (
+                          <button className="btn-secondary" onClick={() => handleDelete(exp)} style={{ padding: '4px 8px', fontSize: '0.75rem', color: 'hsl(350, 85%, 65%)' }}>
+                            Eliminar
+                          </button>
+                        )}
+                      </>
+                    ) : (
+                      <button className="btn-secondary" onClick={() => handleOpenEdit(exp)} style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
+                        👁️ Ver
                       </button>
                     )}
                   </div>

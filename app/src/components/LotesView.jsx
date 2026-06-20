@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { logActivity } from '../utils/activityLogger';
 
-export default function LotesView({ supabase, session, selectedProject, lots, clients, sales, installments, dailyIncome, onRefreshData }) {
+export default function LotesView({ supabase, session, selectedProject, lots, clients, sales, installments, dailyIncome, onRefreshData, permission = 'full' }) {
   const [selectedLot, setSelectedLot] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -399,9 +399,11 @@ EL VENDEDOR                                EL COMPRADOR
             Proyecto seleccionado: <strong style={{ color: 'var(--primary)' }}>{selectedProject.name}</strong>
           </p>
         </div>
-        <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
-          + Crear Nuevo Lote
-        </button>
+        {permission !== 'read' && (
+          <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
+            + Crear Nuevo Lote
+          </button>
+        )}
       </div>
 
       {/* Filters Form */}
@@ -528,7 +530,7 @@ EL VENDEDOR                                EL COMPRADOR
             {/* Status Change Dropdown */}
             <div style={{ marginBottom: '24px' }}>
               <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600', display: 'block', marginBottom: '6px' }}>ESTADO DEL LOTE (CAMBIO MANUAL)</label>
-              <select value={lotData.lot.status} onChange={handleStatusChange} disabled={loading} style={{ width: '100%' }}>
+              <select value={lotData.lot.status} onChange={handleStatusChange} disabled={loading || permission === 'read'} style={{ width: '100%' }}>
                 <option value="disponible">Disponible</option>
                 <option value="separado">Separado</option>
                 <option value="vendido">Vendido</option>
@@ -620,13 +622,15 @@ EL VENDEDOR                                EL COMPRADOR
                       id="signed-contract-file"
                       disabled={loading}
                     />
-                    <label 
-                      htmlFor="signed-contract-file"
-                      className="btn-primary" 
-                      style={{ fontSize: '0.75rem', padding: '6px 12px', cursor: 'pointer' }}
-                    >
-                      {loading ? 'Subiendo...' : 'Seleccionar Archivo'}
-                    </label>
+                    {permission !== 'read' && (
+                      <label 
+                        htmlFor="signed-contract-file"
+                        className="btn-primary" 
+                        style={{ fontSize: '0.75rem', padding: '6px 12px', cursor: 'pointer' }}
+                      >
+                        {loading ? 'Subiendo...' : 'Seleccionar Archivo'}
+                      </label>
+                    )}
                     
                     {lotData.sale && lotData.sale.signed_contract_url && (
                       <div style={{ marginTop: '10px' }}>

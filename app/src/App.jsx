@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 import { supabase } from './supabaseClient';
+import logoUrbis from './assets/logo_urbis.jpg';
 
 // Import view components
 import Login from './components/Login';
@@ -42,6 +43,7 @@ export default function App() {
 
   // Navigation and Role
   const [activeView, setActiveView] = useState('proyectos'); // Default to Proyectos CRUD
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Derive role from profile (fallback to 'secretary')
   const currentRole = userProfile?.role || 'secretary';
@@ -292,6 +294,21 @@ export default function App() {
   return (
     <div className="app-container">
 
+      {/* Mobile Header Bar */}
+      <div className="mobile-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src={logoUrbis} alt="Logo Urbis" style={{ height: '32px', background: 'white', padding: '4px', borderRadius: '6px', objectFit: 'contain' }} />
+          <span style={{ fontSize: '1.1rem', fontWeight: 'bold', fontFamily: 'Outfit', color: 'var(--text-main)', letterSpacing: '-0.02em' }}>URBIS CONTROL</span>
+        </div>
+        <button 
+          className="mobile-menu-btn" 
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          style={{ background: 'none', border: 'none', color: 'var(--text-main)', fontSize: '1.5rem', cursor: 'pointer', outline: 'none' }}
+        >
+          {sidebarOpen ? '✕' : '☰'}
+        </button>
+      </div>
+
       {/* Data loading overlay */}
       {dataLoading && (
         <div style={loadingOverlay}>
@@ -303,12 +320,12 @@ export default function App() {
       )}
 
       {/* Navigation Sidebar */}
-      <div className="sidebar">
-        <div style={{ marginBottom: '24px', textAlign: 'center' }}>
-          <div style={{ fontFamily: 'Outfit', fontWeight: '800', fontSize: '1.4rem', color: 'var(--primary)', letterSpacing: '-0.03em' }}>
-            URBIS CONTROL
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div style={{ marginBottom: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+          <div style={{ background: 'white', padding: '12px', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.15)', display: 'inline-block' }}>
+            <img src={logoUrbis} alt="Urbis Group Logo" style={{ width: '130px', height: 'auto', objectFit: 'contain', display: 'block' }} />
           </div>
-          <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '6px', fontWeight: 'bold' }}>
             SISTEMA INMOBILIARIO
           </span>
         </div>
@@ -336,7 +353,7 @@ export default function App() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flexGrow: 1 }}>
           <button
             className={`btn-secondary ${activeView === 'proyectos' ? 'active-nav' : ''}`}
-            onClick={() => setActiveView('proyectos')}
+            onClick={() => { setActiveView('proyectos'); setSidebarOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             🏢 Proyectos
@@ -344,7 +361,7 @@ export default function App() {
 
           <button
             className={`btn-secondary ${activeView === 'dashboard' ? 'active-nav' : ''}`}
-            onClick={() => setActiveView('dashboard')}
+            onClick={() => { setActiveView('dashboard'); setSidebarOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             📊 Resumen General
@@ -352,7 +369,7 @@ export default function App() {
 
           <button
             className={`btn-secondary ${activeView === 'lotes' ? 'active-nav' : ''}`}
-            onClick={() => setActiveView('lotes')}
+            onClick={() => { setActiveView('lotes'); setSidebarOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             🗺️ Lotes de Terreno
@@ -360,7 +377,7 @@ export default function App() {
 
           <button
             className={`btn-secondary ${activeView === 'clientes' ? 'active-nav' : ''}`}
-            onClick={() => setActiveView('clientes')}
+            onClick={() => { setActiveView('clientes'); setSidebarOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             👥 Ficha Clientes
@@ -368,17 +385,17 @@ export default function App() {
 
           <button
             className={`btn-secondary ${activeView === 'contratos' ? 'active-nav' : ''}`}
-            onClick={() => setActiveView('contratos')}
+            onClick={() => { setActiveView('contratos'); setSidebarOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             📄 Contratos
           </button>
 
-          {/* Secretary & Admin view payment form */}
+           {/* Secretary & Admin view payment form */}
           {currentRole !== 'manager' && (
             <button
               className={`btn-secondary ${activeView === 'ingresos' ? 'active-nav' : ''}`}
-              onClick={() => setActiveView('ingresos')}
+              onClick={() => { setActiveView('ingresos'); setSidebarOpen(false); }}
               style={{ justifyContent: 'flex-start' }}
             >
               📥 Registrar Pago
@@ -389,7 +406,7 @@ export default function App() {
           {currentRole === 'admin' && (
             <button
               className={`btn-secondary ${activeView === 'validacion' ? 'active-nav' : ''}`}
-              onClick={() => setActiveView('validacion')}
+              onClick={() => { setActiveView('validacion'); setSidebarOpen(false); }}
               style={{
                 justifyContent: 'space-between',
                 borderLeft: pendingIncomesCount > 0 ? '3px solid var(--color-separado)' : '1px solid var(--border-color)'
@@ -406,7 +423,7 @@ export default function App() {
 
           <button
             className={`btn-secondary ${activeView === 'gastos' ? 'active-nav' : ''}`}
-            onClick={() => setActiveView('gastos')}
+            onClick={() => { setActiveView('gastos'); setSidebarOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             💸 Gastos Generales
@@ -414,7 +431,7 @@ export default function App() {
 
           <button
             className={`btn-secondary ${activeView === 'cuentas' ? 'active-nav' : ''}`}
-            onClick={() => setActiveView('cuentas')}
+            onClick={() => { setActiveView('cuentas'); setSidebarOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             💳 Cuentas Bancarias
@@ -424,7 +441,7 @@ export default function App() {
           {currentRole === 'admin' && (
             <button
               className={`btn-secondary ${activeView === 'actividades' ? 'active-nav' : ''}`}
-              onClick={() => setActiveView('actividades')}
+              onClick={() => { setActiveView('actividades'); setSidebarOpen(false); }}
               style={{ justifyContent: 'flex-start' }}
             >
               📋 Bitácora Actividades

@@ -37,6 +37,7 @@ export default function App() {
   const [financialAccounts, setFinancialAccounts] = useState([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [fetchError, setFetchError] = useState(null);
 
   // Navigation and Role
   const [activeView, setActiveView] = useState('proyectos'); // Default to Proyectos CRUD
@@ -79,6 +80,7 @@ export default function App() {
           setDailyIncome([]);
           setExpenses([]);
           setFinancialAccounts([]);
+          setFetchError(null);
         }
       }
     );
@@ -121,51 +123,74 @@ export default function App() {
 
     const fetchAllData = async () => {
       setDataLoading(true);
+      setFetchError(null);
 
-      const [
-        projectsRes,
-        lotsRes,
-        clientsRes,
-        salesRes,
-        installmentsRes,
-        dailyIncomeRes,
-        expensesRes,
-        accountsRes,
-      ] = await Promise.all([
-        supabase.from('projects').select('*').order('name'),
-        supabase.from('lots').select('*').order('mz').order('lt'),
-        supabase.from('clients').select('*').order('names'),
-        supabase.from('sales').select('*').order('created_at', { ascending: false }),
-        supabase.from('installments').select('*').order('installment_number'),
-        supabase.from('daily_income').select('*').order('date', { ascending: false }),
-        supabase.from('expenses').select('*').order('date', { ascending: false }),
-        supabase.from('financial_accounts').select('*').order('name'),
-      ]);
+      try {
+        const [
+          projectsRes,
+          lotsRes,
+          clientsRes,
+          salesRes,
+          installmentsRes,
+          dailyIncomeRes,
+          expensesRes,
+          accountsRes,
+        ] = await Promise.all([
+          supabase.from('projects').select('*').order('name'),
+          supabase.from('lots').select('*').order('mz').order('lt'),
+          supabase.from('clients').select('*').order('names'),
+          supabase.from('sales').select('*').order('created_at', { ascending: false }),
+          supabase.from('installments').select('*').order('installment_number'),
+          supabase.from('daily_income').select('*').order('date', { ascending: false }),
+          supabase.from('expenses').select('*').order('issue_date', { ascending: false }),
+          supabase.from('financial_accounts').select('*').order('name'),
+        ]);
 
-      if (projectsRes.data) {
-        setProjects(projectsRes.data);
-        // Set selected project default if none selected or if not in projects list anymore
-        if (projectsRes.data.length > 0) {
-          setSelectedProject(prev => {
-            if (prev && projectsRes.data.find(p => p.id === prev.id)) {
-              return projectsRes.data.find(p => p.id === prev.id);
-            }
-            return projectsRes.data[0];
-          });
-        } else {
-          setSelectedProject(null);
+        const errors = [
+          projectsRes.error,
+          lotsRes.error,
+          clientsRes.error,
+          salesRes.error,
+          installmentsRes.error,
+          dailyIncomeRes.error,
+          expensesRes.error,
+          accountsRes.error
+        ].filter(Boolean);
+
+        if (errors.length > 0) {
+          console.error("Supabase sync errors:", errors);
+          setFetchError("Error al sincronizar tablas: " + errors.map(e => `${e.message} (Código ${e.code || ''})`).join(", "));
         }
+
+        if (projectsRes.data) {
+          setProjects(projectsRes.data);
+          // Set selected project default if none selected or if not in projects list anymore
+          if (projectsRes.data.length > 0) {
+            setSelectedProject(prev => {
+              if (prev && projectsRes.data.find(p => p.id === prev.id)) {
+                return projectsRes.data.find(p => p.id === prev.id);
+              }
+              return projectsRes.data[0];
+            });
+          } else {
+            setSelectedProject(null);
+          }
+        }
+
+        if (lotsRes.data) setLots(lotsRes.data);
+        if (clientsRes.data) setClients(clientsRes.data);
+        if (salesRes.data) setSales(salesRes.data);
+        if (installmentsRes.data) setInstallments(installmentsRes.data);
+        if (dailyIncomeRes.data) setDailyIncome(dailyIncomeRes.data);
+        if (expensesRes.data) setExpenses(expensesRes.data);
+        if (accountsRes.data) setFinancialAccounts(accountsRes.data);
+
+      } catch (err) {
+        console.error("Uncaught fetch error:", err);
+        setFetchError("Error de red o conexión: " + err.message);
+      } finally {
+        setDataLoading(false);
       }
-
-      if (lotsRes.data) setLots(lotsRes.data);
-      if (clientsRes.data) setClients(clientsRes.data);
-      if (salesRes.data) setSales(salesRes.data);
-      if (installmentsRes.data) setInstallments(installmentsRes.data);
-      if (dailyIncomeRes.data) setDailyIncome(dailyIncomeRes.data);
-      if (expensesRes.data) setExpenses(expensesRes.data);
-      if (accountsRes.data) setFinancialAccounts(accountsRes.data);
-
-      setDataLoading(false);
     };
 
     fetchAllData();
@@ -420,6 +445,16 @@ export default function App() {
 
       {/* Main Content Area */}
       <div className="main-content">
+
+        {fetchError && (
+          <div className="glass-panel" style={{ padding: '16px', background: 'hsla(350, 85%, 55%, 0.12)', border: '1px solid hsla(350, 85%, 55%, 0.35)', color: 'hsl(350, 85%, 75%)', borderRadius: '10px', marginBottom: '24px', fontSize: '0.85rem' }}>
+            <strong>⚠️ Error de Sincronización:</strong> {fetchError}
+            <br />
+            <span style={{ fontSize: '0.75rem', opacity: 0.8, display: 'block', marginTop: '4px' }}>
+              Por favor, asegúrate de que todas las tablas y políticas RLS estén creadas ejecutando el script <code>schema.sql</code> en el editor SQL de Supabase.
+            </span>
+          </div>
+        )}
 
         {activeView === 'proyectos' && (
           <ProjectsView

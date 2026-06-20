@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
-// Import compiled Excel data and mock collections
-import * as mockData from './mockData';
+import { supabase } from './supabaseClient';
 
 // Import view components
+import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import LotesView from './components/LotesView';
 import ClientesView from './components/ClientesView';
@@ -13,20 +13,133 @@ import ValidacionView from './components/ValidacionView';
 import GastosView from './components/GastosView';
 
 export default function App() {
-  // 1. Core State loaded from compiled Excel sheet
-  const [lots, setLots] = useState(mockData.lots);
-  const [clients, setClients] = useState(mockData.clients);
-  const [sales, setSales] = useState(mockData.sales);
-  const [installments, setInstallments] = useState(mockData.installments);
-  const [dailyIncome, setDailyIncome] = useState(mockData.dailyIncome);
-  const [expenses, setExpenses] = useState(mockData.expenses);
-  const [financialAccounts, setFinancialAccounts] = useState(mockData.financialAccounts);
+  // ==========================================
+  // AUTH STATE
+  // ==========================================
+  const [session, setSession] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
-  // 2. Navigation and Role configuration
+  // ==========================================
+  // DATA STATE (starts empty, fetched from Supabase)
+  // ==========================================
+  const [lots, setLots] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [sales, setSales] = useState([]);
+  const [installments, setInstallments] = useState([]);
+  const [dailyIncome, setDailyIncome] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [financialAccounts, setFinancialAccounts] = useState([]);
+  const [dataLoading, setDataLoading] = useState(false);
+
+  // Navigation and Role
   const [activeView, setActiveView] = useState('dashboard');
-  const [currentRole, setCurrentRole] = useState('admin'); // admin, secretary, manager
 
-  // 3. Helper to count pending validation vouchers
+  // Derive role from profile (fallback to 'secretary')
+  const currentRole = userProfile?.role || 'secretary';
+
+  // ==========================================
+  // AUTH LIFECYCLE
+  // ==========================================
+  useEffect(() => {
+    // 1. Check existing session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+      setAuthLoading(false);
+    });
+
+    // 2. Listen for auth changes (login, logout, token refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, newSession) => {
+        setSession(newSession);
+        if (!newSession) {
+          // Logged out — clear everything
+          setUserProfile(null);
+          setLots([]);
+          setClients([]);
+          setSales([]);
+          setInstallments([]);
+          setDailyIncome([]);
+          setExpenses([]);
+          setFinancialAccounts([]);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // ==========================================
+  // FETCH USER PROFILE (on session change)
+  // ==========================================
+  useEffect(() => {
+    if (!session?.user) {
+      setUserProfile(null);
+      return;
+    }
+
+    const fetchProfile = async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', session.user.id)
+        .single();
+
+      if (!error && data) {
+        setUserProfile(data);
+      } else {
+        // If no profile row exists, use a default
+        setUserProfile({ id: session.user.id, role: 'secretary', full_name: session.user.email });
+      }
+    };
+
+    fetchProfile();
+  }, [session]);
+
+  // ==========================================
+  // FETCH ALL DATA (when authenticated)
+  // ==========================================
+  useEffect(() => {
+    if (!session) return;
+
+    const fetchAllData = async () => {
+      setDataLoading(true);
+
+      const [
+        lotsRes,
+        clientsRes,
+        salesRes,
+        installmentsRes,
+        dailyIncomeRes,
+        expensesRes,
+        accountsRes,
+      ] = await Promise.all([
+        supabase.from('lots').select('*, projects(name)').order('lot_number'),
+        supabase.from('clients').select('*').order('full_name'),
+        supabase.from('sales').select('*').order('sale_date', { ascending: false }),
+        supabase.from('installments').select('*').order('installment_number'),
+        supabase.from('daily_income').select('*').order('date', { ascending: false }),
+        supabase.from('expenses').select('*').order('date', { ascending: false }),
+        supabase.from('financial_accounts').select('*').order('name'),
+      ]);
+
+      if (lotsRes.data) setLots(lotsRes.data);
+      if (clientsRes.data) setClients(clientsRes.data);
+      if (salesRes.data) setSales(salesRes.data);
+      if (installmentsRes.data) setInstallments(installmentsRes.data);
+      if (dailyIncomeRes.data) setDailyIncome(dailyIncomeRes.data);
+      if (expensesRes.data) setExpenses(expensesRes.data);
+      if (accountsRes.data) setFinancialAccounts(accountsRes.data);
+
+      setDataLoading(false);
+    };
+
+    fetchAllData();
+  }, [session]);
+
+  // ==========================================
+  // PENDING INCOMES COUNT
+  // ==========================================
   const pendingIncomesCount = dailyIncome.filter(inc => !inc.approved).length;
 
   // ==========================================
@@ -35,12 +148,11 @@ export default function App() {
 
   // Approve a pending income and apply to database schema
   const handleApproveIncome = (incomeId) => {
-    // Find the income record
     const income = dailyIncome.find(inc => inc.id === incomeId);
     if (!income) return;
 
     // A. Mark income as approved
-    const updatedIncome = dailyIncome.map(inc => 
+    const updatedIncome = dailyIncome.map(inc =>
       inc.id === incomeId ? { ...inc, approved: true } : inc
     );
 
@@ -52,18 +164,15 @@ export default function App() {
     const lot = lots.find(l => l.id === income.lot_id);
 
     if (income.income_type === 'separacion') {
-      // 1. SEPARACIÓN: Change lot state to 'separado'
-      updatedLots = lots.map(l => 
+      updatedLots = lots.map(l =>
         l.id === income.lot_id ? { ...l, status: 'separado' } : l
       );
-    } 
+    }
     else if (income.income_type === 'inicial') {
-      // 2. INICIAL: Transition lot state to 'vendido'
-      updatedLots = lots.map(l => 
+      updatedLots = lots.map(l =>
         l.id === income.lot_id ? { ...l, status: 'vendido' } : l
       );
 
-      // Check if a sale already exists for this lot. If not, create it.
       let sale = sales.find(s => s.lot_id === income.lot_id);
       if (!sale) {
         const newSaleId = `sale-${income.lot_id}`;
@@ -80,11 +189,9 @@ export default function App() {
         };
         updatedSales.push(newSale);
 
-        // Auto-generate 48 months payment schedule
         const monthlyAmount = lot ? ((lot.total_price - income.amount) / 48) : 300;
         const startDate = new Date(income.date);
-        
-        // Add initial payment as cuota 0
+
         updatedInstallments.push({
           id: `inst-${newSaleId}-0`,
           sale_id: newSaleId,
@@ -108,7 +215,6 @@ export default function App() {
           });
         }
       } else {
-        // If sale exists, check if there's a cuota 0 (Inicial) to credit
         updatedInstallments = installments.map(inst => {
           if (inst.sale_id === sale.id && inst.installment_number === 0) {
             const newPaid = inst.amount_paid + income.amount;
@@ -121,17 +227,11 @@ export default function App() {
           return inst;
         });
       }
-    } 
+    }
     else if (income.income_type === 'cuota') {
-      // 3. CUOTA: Apply payment to oldest pending installment
       const sale = sales.find(s => s.lot_id === income.lot_id);
       if (sale) {
         let paymentLeft = income.amount;
-        
-        // Get sale installments sorted by cuota number
-        const saleInsts = updatedInstallments
-          .filter(inst => inst.sale_id === sale.id)
-          .sort((a, b) => a.installment_number - b.installment_number);
 
         updatedInstallments = updatedInstallments.map(inst => {
           if (inst.sale_id === sale.id && paymentLeft > 0 && inst.status !== 'pagado') {
@@ -158,7 +258,6 @@ export default function App() {
       }
     }
 
-    // C. Set state
     setLots(updatedLots);
     setSales(updatedSales);
     setInstallments(updatedInstallments);
@@ -167,34 +266,72 @@ export default function App() {
 
   // Reject a pending income
   const handleRejectIncome = (incomeId) => {
-    // Simply remove it from the incomes collection
     setDailyIncome(dailyIncome.filter(inc => inc.id !== incomeId));
     alert("El voucher ha sido rechazado y removido de la bandeja de validación.");
   };
 
-  // Add new client to collection
+  // Add new client
   const handleAddClient = (client) => {
     setClients([client, ...clients]);
   };
 
-  // Update sale properties (e.g. upload signed contract)
+  // Update sale
   const handleUpdateSale = (updatedSale) => {
     setSales(sales.map(s => s.id === updatedSale.id ? updatedSale : s));
   };
 
-  // Add a pending income payment registered by secretary
+  // Add a pending income
   const handleAddIncome = (income) => {
     setDailyIncome([income, ...dailyIncome]);
   };
 
-  // Add new expense log
+  // Add new expense
   const handleAddExpense = (expense) => {
     setExpenses([expense, ...expenses]);
   };
 
+  // Logout
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
+  // ==========================================
+  // RENDER: Auth Loading
+  // ==========================================
+  if (authLoading) {
+    return (
+      <div style={fullScreenCenter}>
+        <div className="loading-spinner" />
+        <p style={{ color: 'var(--text-muted)', marginTop: '20px', fontSize: '0.9rem' }}>
+          Verificando sesión...
+        </p>
+      </div>
+    );
+  }
+
+  // ==========================================
+  // RENDER: Login Screen
+  // ==========================================
+  if (!session) {
+    return <Login onLogin={() => { /* handled by onAuthStateChange */ }} />;
+  }
+
+  // ==========================================
+  // RENDER: Main App (with data loading overlay)
+  // ==========================================
   return (
     <div className="app-container">
-      
+
+      {/* Data loading overlay */}
+      {dataLoading && (
+        <div style={loadingOverlay}>
+          <div className="loading-spinner" />
+          <p style={{ color: 'var(--text-muted)', marginTop: '20px', fontSize: '0.9rem' }}>
+            Cargando datos del sistema...
+          </p>
+        </div>
+      )}
+
       {/* Navigation Sidebar */}
       <div className="sidebar">
         <div style={{ marginBottom: '32px', textAlign: 'center' }}>
@@ -208,15 +345,15 @@ export default function App() {
 
         {/* Navigation links */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flexGrow: 1 }}>
-          <button 
+          <button
             className={`btn-secondary ${activeView === 'dashboard' ? 'active-nav' : ''}`}
             onClick={() => setActiveView('dashboard')}
             style={{ justifyContent: 'flex-start' }}
           >
             📊 Resumen General
           </button>
-          
-          <button 
+
+          <button
             className={`btn-secondary ${activeView === 'lotes' ? 'active-nav' : ''}`}
             onClick={() => setActiveView('lotes')}
             style={{ justifyContent: 'flex-start' }}
@@ -224,7 +361,7 @@ export default function App() {
             🗺️ Lotes de Terreno
           </button>
 
-          <button 
+          <button
             className={`btn-secondary ${activeView === 'clientes' ? 'active-nav' : ''}`}
             onClick={() => setActiveView('clientes')}
             style={{ justifyContent: 'flex-start' }}
@@ -234,7 +371,7 @@ export default function App() {
 
           {/* Secretary & Admin view payment form */}
           {currentRole !== 'manager' && (
-            <button 
+            <button
               className={`btn-secondary ${activeView === 'ingresos' ? 'active-nav' : ''}`}
               onClick={() => setActiveView('ingresos')}
               style={{ justifyContent: 'flex-start' }}
@@ -245,10 +382,10 @@ export default function App() {
 
           {/* Admin only approval view */}
           {currentRole === 'admin' && (
-            <button 
+            <button
               className={`btn-secondary ${activeView === 'validacion' ? 'active-nav' : ''}`}
               onClick={() => setActiveView('validacion')}
-              style={{ 
+              style={{
                 justifyContent: 'space-between',
                 borderLeft: pendingIncomesCount > 0 ? '3px solid var(--color-separado)' : '1px solid var(--border-color)'
               }}
@@ -262,7 +399,7 @@ export default function App() {
             </button>
           )}
 
-          <button 
+          <button
             className={`btn-secondary ${activeView === 'gastos' ? 'active-nav' : ''}`}
             onClick={() => setActiveView('gastos')}
             style={{ justifyContent: 'flex-start' }}
@@ -271,32 +408,31 @@ export default function App() {
           </button>
         </div>
 
-        {/* User Role Switcher in Sidebar footer */}
+        {/* User info & Logout */}
         <div style={{ marginTop: 'auto', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
-          <label style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-            SIMULAR PERFIL DE USUARIO:
-          </label>
-          <select 
-            value={currentRole} 
-            onChange={(e) => {
-              setCurrentRole(e.target.value);
-              setActiveView('dashboard'); // reset to home
-            }}
-            style={{ width: '100%', fontSize: '0.75rem', padding: '6px' }}
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 600 }}>
+              {userProfile?.full_name || session.user.email}
+            </div>
+            <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '2px' }}>
+              {currentRole === 'admin' ? '🛡️ Administrador' : currentRole === 'manager' ? '📋 Encargado' : '📝 Secretaria'}
+            </div>
+          </div>
+          <button
+            className="btn-secondary"
+            onClick={handleLogout}
+            style={{ width: '100%', justifyContent: 'center', fontSize: '0.8rem', padding: '8px' }}
           >
-            <option value="admin">Administrador (Tú)</option>
-            <option value="secretary">Secretaria</option>
-            <option value="manager">Visualizador (Encargado)</option>
-          </select>
+            🚪 Cerrar Sesión
+          </button>
         </div>
       </div>
 
       {/* Main Content Area */}
       <div className="main-content">
-        
-        {/* Dynamic View Router */}
+
         {activeView === 'dashboard' && (
-          <Dashboard 
+          <Dashboard
             lots={lots}
             sales={sales}
             installments={installments}
@@ -306,7 +442,7 @@ export default function App() {
         )}
 
         {activeView === 'lotes' && (
-          <LotesView 
+          <LotesView
             lots={lots}
             clients={clients}
             sales={sales}
@@ -317,14 +453,14 @@ export default function App() {
         )}
 
         {activeView === 'clientes' && (
-          <ClientesView 
+          <ClientesView
             clients={clients}
             onAddClient={handleAddClient}
           />
         )}
 
         {activeView === 'ingresos' && currentRole !== 'manager' && (
-          <IngresosForm 
+          <IngresosForm
             lots={lots}
             clients={clients}
             sales={sales}
@@ -334,7 +470,7 @@ export default function App() {
         )}
 
         {activeView === 'validacion' && currentRole === 'admin' && (
-          <ValidacionView 
+          <ValidacionView
             dailyIncome={dailyIncome}
             lots={lots}
             clients={clients}
@@ -345,7 +481,7 @@ export default function App() {
         )}
 
         {activeView === 'gastos' && (
-          <GastosView 
+          <GastosView
             expenses={expenses}
             onAddExpense={handleAddExpense}
           />
@@ -355,3 +491,25 @@ export default function App() {
     </div>
   );
 }
+
+/* ===== Layout helper styles ===== */
+const fullScreenCenter = {
+  minHeight: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  background: 'var(--bg-main)',
+};
+
+const loadingOverlay = {
+  position: 'fixed',
+  inset: 0,
+  zIndex: 9999,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  background: 'hsla(222, 25%, 10%, 0.85)',
+  backdropFilter: 'blur(6px)',
+};

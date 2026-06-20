@@ -10,10 +10,8 @@ import Dashboard from './components/Dashboard';
 import LotesView from './components/LotesView';
 import ClientesView from './components/ClientesView';
 import IngresosForm from './components/IngresosForm';
-import ValidacionView from './components/ValidacionView';
 import GastosView from './components/GastosView';
 import ProjectsView from './components/ProjectsView';
-import CuentasView from './components/CuentasView';
 import ActivityLogView from './components/ActivityLogView';
 import ContratosView from './components/ContratosView';
 import UsuariosView from './components/UsuariosView';
@@ -45,6 +43,12 @@ export default function App() {
   // Navigation and Role
   const [activeView, setActiveView] = useState('proyectos'); // Default to Proyectos CRUD
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [preselectedLotId, setPreselectedLotId] = useState(null);
+
+  const handleNavigateToContract = (lotId) => {
+    setPreselectedLotId(lotId);
+    setActiveView('contratos');
+  };
 
   // Derive role from profile (fallback to 'secretary')
   const currentRole = userProfile?.role || 'secretary';
@@ -437,25 +441,6 @@ export default function App() {
             </button>
           )}
 
-          {/* Admin only approval view */}
-          {currentRole === 'admin' && (
-            <button
-              className={`btn-secondary ${activeView === 'validacion' ? 'active-nav' : ''}`}
-              onClick={() => { setActiveView('validacion'); setSidebarOpen(false); }}
-              style={{
-                justifyContent: 'space-between',
-                borderLeft: pendingIncomesCount > 0 ? '3px solid var(--color-separado)' : '1px solid var(--border-color)'
-              }}
-            >
-              <span>🔔 Validar Pagos</span>
-              {pendingIncomesCount > 0 && (
-                <span className="badge badge-separado" style={{ padding: '2px 8px', fontSize: '0.65rem' }}>
-                  {pendingIncomesCount}
-                </span>
-              )}
-            </button>
-          )}
-
           {getModulePermission('gastos') !== 'none' && (
             <button
               className={`btn-secondary ${activeView === 'gastos' ? 'active-nav' : ''}`}
@@ -463,16 +448,6 @@ export default function App() {
               style={{ justifyContent: 'flex-start' }}
             >
               💸 Gastos Generales
-            </button>
-          )}
-
-          {getModulePermission('cuentas') !== 'none' && (
-            <button
-              className={`btn-secondary ${activeView === 'cuentas' ? 'active-nav' : ''}`}
-              onClick={() => { setActiveView('cuentas'); setSidebarOpen(false); }}
-              style={{ justifyContent: 'flex-start' }}
-            >
-              💳 Cuentas Bancarias
             </button>
           )}
 
@@ -544,6 +519,7 @@ export default function App() {
 
         {activeView === 'dashboard' && (
           <Dashboard
+            supabase={supabase}
             lots={filteredLots}
             sales={filteredSales}
             installments={filteredInstallments}
@@ -588,6 +564,8 @@ export default function App() {
             installments={installments}
             onRefreshData={handleRefreshData}
             permission={getModulePermission('contratos')}
+            preselectedLotId={preselectedLotId}
+            clearPreselectedLotId={() => setPreselectedLotId(null)}
           />
         )}
 
@@ -601,18 +579,7 @@ export default function App() {
             financialAccounts={financialAccounts}
             onRefreshData={handleRefreshData}
             permission={getModulePermission('ingresos')}
-          />
-        )}
-
-        {activeView === 'validacion' && currentRole === 'admin' && (
-          <ValidacionView
-            supabase={supabase}
-            session={session}
-            dailyIncome={dailyIncome}
-            lots={lots}
-            clients={clients}
-            financialAccounts={financialAccounts}
-            onRefreshData={handleRefreshData}
+            onNavigateToContract={handleNavigateToContract}
           />
         )}
 
@@ -624,15 +591,6 @@ export default function App() {
             expenses={expenses}
             onRefreshData={handleRefreshData}
             permission={getModulePermission('gastos')}
-          />
-        )}
-
-        {activeView === 'cuentas' && getModulePermission('cuentas') !== 'none' && (
-          <CuentasView
-            supabase={supabase}
-            session={session}
-            selectedProject={selectedProject}
-            permission={getModulePermission('cuentas')}
           />
         )}
 

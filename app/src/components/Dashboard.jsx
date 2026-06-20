@@ -1,6 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default function Dashboard({ lots, sales, installments, dailyIncome, expenses }) {
+export default function Dashboard({ supabase, lots, sales, installments, dailyIncome, expenses }) {
+  const [secretaries, setSecretaries] = useState([]);
+  const [loadingSecs, setLoadingSecs] = useState(true);
+
+  useEffect(() => {
+    if (!supabase) return;
+    const fetchSecretaries = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, full_name')
+          .eq('role', 'secretary');
+        if (!error && data) {
+          setSecretaries(data);
+        }
+      } catch (err) {
+        console.error("Error fetching secretaries:", err);
+      } finally {
+        setLoadingSecs(false);
+      }
+    };
+    fetchSecretaries();
+  }, [supabase]);
+
+  // Calculate statistics per secretary for daily income in the active project
+  const secretarySales = secretaries.map(sec => {
+    // Note: dailyIncome prop is already filtered for the active project
+    const secPayments = dailyIncome.filter(inc => inc.registered_by === sec.id);
+    const totalAmount = secPayments.reduce((sum, inc) => sum + (inc.amount || 0), 0);
+    const totalCount = secPayments.length;
+    return {
+      ...sec,
+      totalAmount,
+      totalCount
+    };
+  }).sort((a, b) => b.totalAmount - a.totalAmount);
+
+  const maxAmount = Math.max(...secretarySales.map(s => s.totalAmount), 0);
+
   // 1. Calculate Money Categories dynamically from dailyIncome and associated sales/separations
   const getIncomeSums = () => {
     let processSum = 0;   // In-progress sales
@@ -154,6 +192,57 @@ export default function Dashboard({ lots, sales, installments, dailyIncome, expe
             <span>Gastos netos del proyecto.</span>
           </div>
         </div>
+      </div>
+
+      {/* Secretary Progress Chart */}
+      <div className="glass-panel" style={{ padding: '24px', marginTop: '24px' }}>
+        <h3 style={{ margin: '0 0 4px 0' }}>📊 Avance y Recaudación por Secretaria</h3>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', margin: '0 0 20px 0' }}>
+          Monitoreo de ingresos registrados por cada secretaria en el proyecto activo.
+        </p>
+
+        {loadingSecs ? (
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            <div className="loading-spinner" style={{ display: 'inline-block', width: '24px', height: '24px' }}></div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '8px' }}>Cargando información de secretarias...</p>
+          </div>
+        ) : secretarySales.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+            No se encontraron secretarias registradas en el sistema.
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {secretarySales.map((sec) => {
+              const percentage = maxAmount > 0 ? (sec.totalAmount / maxAmount) * 100 : 0;
+              return (
+                <div key={sec.id} style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '12px 16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <div>
+                      <span style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '0.9rem' }}>{sec.full_name}</span>
+                      <span className="badge badge-disponible" style={{ marginLeft: '8px', fontSize: '0.65rem', padding: '1px 6px', background: 'var(--primary)', color: 'var(--bg-main)' }}>
+                        {sec.totalCount} {sec.totalCount === 1 ? 'pago' : 'pagos'}
+                      </span>
+                    </div>
+                    <div style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '0.95rem' }}>
+                      S/. {sec.totalAmount.toLocaleString('es-PE', { minimumFractionDigits: 2 })}
+                    </div>
+                  </div>
+                  <div style={{ background: 'var(--bg-sidebar)', borderRadius: '6px', height: '10px', overflow: 'hidden' }}>
+                    <div 
+                      style={{ 
+                        width: `${percentage}%`, 
+                        background: 'linear-gradient(90deg, var(--primary) 0%, hsl(145, 45%, 60%) 100%)', 
+                        height: '100%', 
+                        borderRadius: '6px',
+                        transition: 'width 0.8s ease-in-out' 
+                      }} 
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

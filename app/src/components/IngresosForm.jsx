@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { logActivity } from '../utils/activityLogger';
 
-export default function IngresosForm({ supabase, session, selectedProject, lots, clients, financialAccounts, onRefreshData, permission = 'full' }) {
+export default function IngresosForm({ supabase, session, selectedProject, lots, clients, financialAccounts, onRefreshData, permission = 'full', onNavigateToContract }) {
   const [loading, setLoading] = useState(false);
+  const [createdSaleInfo, setCreatedSaleInfo] = useState(null);
   
   // Option A (Separación) vs Option B (Pago)
   const [formMode, setFormMode] = useState('separacion'); // 'separacion' or 'pago'
@@ -199,17 +200,6 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
     setLoading(true);
 
     try {
-      // 1. Get user profile role
-      const { data: userProfile, error: profileErr } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', session.user.id)
-        .single();
-
-      if (profileErr) throw profileErr;
-
-      const isAdmin = userProfile.role === 'admin';
-
       // 2. Upload Voucher Photo
       const fileExt = voucherFile.name.split('.').pop();
       const fileName = `${selectedLotId}_${Date.now()}.${fileExt}`;
@@ -237,28 +227,13 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
         voucher_url: voucherUrl,
         observation: obs,
         registered_by: session.user.id,
-        approved: isAdmin,
-        approved_by: isAdmin ? session.user.id : null,
-        approved_at: isAdmin ? new Date().toISOString() : null
+        approved: true,
+        approved_by: session.user.id,
+        approved_at: new Date().toISOString()
       };
 
-      if (!isAdmin) {
-        // SECRETARY: Just insert the pending income
-        const { error } = await supabase.from('daily_income').insert(dailyIncomeData);
-        if (error) throw error;
-
-        await logActivity(supabase, {
-          userId: session.user.id,
-          userEmail: session.user.email,
-          action: 'registrar_pago_pendiente',
-          entityType: 'income',
-          entityId: opNum,
-          details: `Ingreso por S/. ${amount} registrado y enviado a validación.`,
-        });
-
-        alert("Pago registrado con éxito. Ha sido enviado a la bandeja de validación del Administrador.");
-      } else {
-        // ADMIN: Insert and apply transaction side effects
+      {
+        // Insert and apply transaction side effects
         const lot = projectLots.find(l => l.id === selectedLotId);
 
         if (formMode === 'separacion') {
@@ -400,6 +375,17 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
             entityId: incomeRecord.id,
             details: `Venta con Inicial de S/. ${amount} aprobada por Admin. Se generaron ${installmentsCount} cuotas. Lote MZ ${lot.mz} LT ${lot.lt} vendido.`,
           });
+
+          // Guardar información para mostrar el cronograma
+          setCreatedSaleInfo({
+            saleId: saleRecord.id,
+            lotId: selectedLotId,
+            lotName: `MZ ${lot.mz} LT ${lot.lt}`,
+            clientName: clients.find(c => c.dni === selectedClientId)?.names || 'Comprador',
+            amountPaid: parseFloat(amount),
+            installmentsCount: installmentsCount,
+            installments: installmentsToInsert
+          });
         }
         else if (formMode === 'pago' && pagoSubType === 'cuota') {
           // Find sale for this lot
@@ -476,18 +462,20 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
             details: `Abono de Cuota por S/. ${amount} aprobado automáticamente por Admin para lote MZ ${lot.mz} LT ${lot.lt}.`,
           });
         }
-        
-        alert("Pago registrado y aprobado correctamente. Base de datos actualizada.");
       }
 
-      // Reset
-      setSelectedLotId('');
-      setSelectedClientId('');
-      setAmount('');
-      setOpNum('');
-      setObs('');
-      setVoucherFile(null);
       if (onRefreshData) onRefreshData();
+
+      // Si no es un pago inicial de nueva venta, alertamos y reseteamos el formulario normalmente
+      if (formMode !== 'pago' || pagoSubType !== 'inicial') {
+        alert("Pago registrado y aprobado correctamente. Base de datos actualizada.");
+        setSelectedLotId('');
+        setSelectedClientId('');
+        setAmount('');
+        setOpNum('');
+        setObs('');
+        setVoucherFile(null);
+      }
     } catch (err) {
       console.error(err);
       alert("Error al registrar abono: " + err.message);
@@ -500,6 +488,98 @@ export default function IngresosForm({ supabase, session, selectedProject, lots,
     return (
       <div className="glass-panel" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
         ⚠️ Por favor, seleccione un proyecto en la barra lateral antes de registrar ingresos.
+      </div>
+    );
+  }
+
+  if (createdSaleInfo) {
+    return (
+      <div style={{ maxWidth: '650px', margin: '0 auto' }}>
+        <div style={{ marginBottom: '24px', textAlign: 'center' }}>
+          <span style={{ fontSize: '3rem' }}>🎉</span>
+          <h1 style={{ margin: '12px 0 0 0', fontSize: '2rem', color: 'var(--primary)' }}>Venta e Inicial Registradas</h1>
+          <p style={{ color: 'var(--text-muted)', margin: '4px 0 0 0' }}>El lote ya se encuentra registrado como vendido y el cronograma ha sido generado.</p>
+        </div>
+
+        <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px' }}>
+          <h3 style={{ margin: '0 0 16px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Detalles de la Operación</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '0.9rem', marginBottom: '16px' }}>
+            <div><strong>Lote:</strong> {createdSaleInfo.lotName}</div>
+            <div><strong>Cliente:</strong> {createdSaleInfo.clientName}</div>
+            <div><strong>Cuota Inicial:</strong> S/. {createdSaleInfo.amountPaid.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</div>
+            <div><strong>N° de Cuotas:</strong> {createdSaleInfo.installmentsCount} meses</div>
+          </div>
+
+          <h3 style={{ margin: '24px 0 12px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Cronograma de Pagos Generado</h3>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-color)', textAlign: 'left' }}>
+                  <th style={{ padding: '8px' }}>N° Cuota</th>
+                  <th style={{ padding: '8px' }}>Vencimiento</th>
+                  <th style={{ padding: '8px', textAlign: 'right' }}>Monto</th>
+                  <th style={{ padding: '8px', textAlign: 'center' }}>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {createdSaleInfo.installments.map((inst, idx) => (
+                  <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <td style={{ padding: '8px' }}>
+                      {inst.installment_number === 0 ? 'Inicial (00)' : `Cuota ${inst.installment_number.toString().padStart(2, '0')}`}
+                    </td>
+                    <td style={{ padding: '8px' }}>{inst.due_date}</td>
+                    <td style={{ padding: '8px', textAlign: 'right' }}>
+                      S/. {inst.amount.toLocaleString('es-PE', { minimumFractionDigits: 2 })}
+                    </td>
+                    <td style={{ padding: '8px', textAlign: 'center' }}>
+                      <span className={`badge ${inst.status === 'pagado' ? 'badge-disponible' : 'badge-separado'}`} style={{ padding: '2px 6px', fontSize: '0.7rem' }}>
+                        {inst.status === 'pagado' ? 'PAGADO' : 'PENDIENTE'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button 
+            className="btn-secondary" 
+            onClick={() => {
+              setCreatedSaleInfo(null);
+              setSelectedLotId('');
+              setSelectedClientId('');
+              setAmount('');
+              setOpNum('');
+              setObs('');
+              setVoucherFile(null);
+            }} 
+            style={{ flexGrow: 1, padding: '12px' }}
+          >
+            📥 Registrar Otro Pago
+          </button>
+          
+          <button 
+            className="btn-primary" 
+            onClick={() => {
+              const lotId = createdSaleInfo.lotId;
+              setCreatedSaleInfo(null);
+              setSelectedLotId('');
+              setSelectedClientId('');
+              setAmount('');
+              setOpNum('');
+              setObs('');
+              setVoucherFile(null);
+              if (onNavigateToContract) {
+                onNavigateToContract(lotId);
+              }
+            }} 
+            style={{ flexGrow: 1, padding: '12px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}
+          >
+            📄 Ir al Contrato del Lote
+          </button>
+        </div>
       </div>
     );
   }

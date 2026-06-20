@@ -102,7 +102,7 @@ function numeroALetras(num) {
   return `${Millones(entero)} CON ${centavosStr}`;
 }
 
-export default function ContratosView({ supabase, session, selectedProject, lots, clients, sales, installments, onRefreshData, permission = 'full' }) {
+export default function ContratosView({ supabase, session, selectedProject, lots, clients, sales, installments, onRefreshData, permission = 'full', preselectedLotId, clearPreselectedLotId }) {
   const [activeTab, setActiveTab] = useState('generar'); // 'plantilla' or 'generar'
   const [loading, setLoading] = useState(false);
   const [templateText, setTemplateText] = useState('');
@@ -118,6 +118,22 @@ export default function ContratosView({ supabase, session, selectedProject, lots
       setTemplateText(selectedProject.contract_template || '');
     }
   }, [selectedProject]);
+
+  // Effect to handle redirection from Initial Payment to preview the contract
+  useEffect(() => {
+    if (preselectedLotId && lots.length > 0 && templateText) {
+      const lot = lots.find(l => l.id === preselectedLotId);
+      if (lot) {
+        const sale = sales.find(s => s.lot_id === lot.id && s.status !== 'expropiado');
+        const client = sale ? clients.find(c => c.dni === sale.client_id) : null;
+        setActiveTab('generar');
+        handleOpenPreview(lot, client, sale);
+        if (clearPreselectedLotId) {
+          clearPreselectedLotId();
+        }
+      }
+    }
+  }, [preselectedLotId, lots, sales, clients, templateText]);
 
   if (!selectedProject) {
     return (

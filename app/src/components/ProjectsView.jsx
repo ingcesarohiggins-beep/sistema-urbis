@@ -33,6 +33,15 @@ export default function ProjectsView({ supabase, session, onRefreshData, current
   const [predioZonaRegistral, setPredioZonaRegistral] = useState('');
   const [latePenaltyRate, setLatePenaltyRate] = useState('1.50');
   const [contractTemplate, setContractTemplate] = useState('');
+
+  // Document uploading states
+  const [copiaLiteralFile, setCopiaLiteralFile] = useState(null);
+  const [copiaLiteralUrl, setCopiaLiteralUrl] = useState('');
+  const [copiaLiteralExpiryDate, setCopiaLiteralExpiryDate] = useState('');
+  const [dniTitularFile, setDniTitularFile] = useState(null);
+  const [dniTitularUrl, setDniTitularUrl] = useState('');
+  const [cartaPoderFile, setCartaPoderFile] = useState(null);
+  const [cartaPoderUrl, setCartaPoderUrl] = useState('');
   
   // UI States
   const [expandedProjectId, setExpandedProjectId] = useState(null);
@@ -81,6 +90,13 @@ export default function ProjectsView({ supabase, session, onRefreshData, current
     setPredioZonaRegistral('');
     setLatePenaltyRate('1.50');
     setContractTemplate('');
+    setCopiaLiteralFile(null);
+    setCopiaLiteralUrl('');
+    setCopiaLiteralExpiryDate('');
+    setDniTitularFile(null);
+    setDniTitularUrl('');
+    setCartaPoderFile(null);
+    setCartaPoderUrl('');
     setShowModal(true);
   };
 
@@ -111,6 +127,13 @@ export default function ProjectsView({ supabase, session, onRefreshData, current
     setPredioZonaRegistral(project.predio_zona_registral || '');
     setLatePenaltyRate(project.late_penalty_rate || '1.50');
     setContractTemplate(project.contract_template || '');
+    setCopiaLiteralFile(null);
+    setCopiaLiteralUrl(project.copia_literal_url || '');
+    setCopiaLiteralExpiryDate(project.copia_literal_expiry_date || '');
+    setDniTitularFile(null);
+    setDniTitularUrl(project.dni_titular_url || '');
+    setCartaPoderFile(null);
+    setCartaPoderUrl(project.carta_poder_url || '');
     setShowModal(true);
   };
 
@@ -127,12 +150,31 @@ export default function ProjectsView({ supabase, session, onRefreshData, current
       return;
     }
 
+    // Required fields validation for new project documentation
+    if (!editingProject) {
+      if (!copiaLiteralFile) {
+        alert('Por favor suba la Copia Literal.');
+        return;
+      }
+      if (!copiaLiteralExpiryDate) {
+        alert('Por favor ingrese la fecha de vencimiento de la Copia Literal.');
+        return;
+      }
+      if (!dniTitularFile) {
+        alert('Por favor suba el DNI del titular (Ambas Caras).');
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
       let finalPhotoUrl = photoUrl;
+      let finalCopiaLiteralUrl = copiaLiteralUrl;
+      let finalDniTitularUrl = dniTitularUrl;
+      let finalCartaPoderUrl = cartaPoderUrl;
 
-      // Upload photo if a new one is selected
+      // 1. Upload photo if selected
       if (photo) {
         const fileExt = photo.name.split('.').pop();
         const fileName = `${Date.now()}_project.${fileExt}`;
@@ -146,6 +188,57 @@ export default function ProjectsView({ supabase, session, onRefreshData, current
 
         const { data } = supabase.storage.from('urbis-files').getPublicUrl(filePath);
         finalPhotoUrl = data.publicUrl;
+      }
+
+      // Generate a temporary folder name for new project if we don't have an ID
+      const projIdForFiles = editingProject ? editingProject.id : Math.random().toString(36).substring(2, 15);
+
+      // 2. Upload Copia Literal if selected
+      if (copiaLiteralFile) {
+        const fileExt = copiaLiteralFile.name.split('.').pop();
+        const fileName = `copia_literal_${Date.now()}.${fileExt}`;
+        const filePath = `projects/docs/${projIdForFiles}/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('urbis-files')
+          .upload(filePath, copiaLiteralFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage.from('urbis-files').getPublicUrl(filePath);
+        finalCopiaLiteralUrl = data.publicUrl;
+      }
+
+      // 3. Upload DNI Titular if selected
+      if (dniTitularFile) {
+        const fileExt = dniTitularFile.name.split('.').pop();
+        const fileName = `dni_titular_${Date.now()}.${fileExt}`;
+        const filePath = `projects/docs/${projIdForFiles}/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('urbis-files')
+          .upload(filePath, dniTitularFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage.from('urbis-files').getPublicUrl(filePath);
+        finalDniTitularUrl = data.publicUrl;
+      }
+
+      // 4. Upload Carta Poder if selected
+      if (cartaPoderFile) {
+        const fileExt = cartaPoderFile.name.split('.').pop();
+        const fileName = `carta_poder_${Date.now()}.${fileExt}`;
+        const filePath = `projects/docs/${projIdForFiles}/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('urbis-files')
+          .upload(filePath, cartaPoderFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage.from('urbis-files').getPublicUrl(filePath);
+        finalCartaPoderUrl = data.publicUrl;
       }
 
       const projectData = {
@@ -173,6 +266,10 @@ export default function ProjectsView({ supabase, session, onRefreshData, current
         predio_zona_registral: predioZonaRegistral,
         late_penalty_rate: parseFloat(latePenaltyRate) || 1.50,
         contract_template: contractTemplate,
+        copia_literal_url: finalCopiaLiteralUrl,
+        copia_literal_expiry_date: copiaLiteralExpiryDate ? copiaLiteralExpiryDate : null,
+        dni_titular_url: finalDniTitularUrl,
+        carta_poder_url: finalCartaPoderUrl
       };
 
       if (editingProject) {
@@ -317,14 +414,42 @@ export default function ProjectsView({ supabase, session, onRefreshData, current
                   <div><strong>Banco:</strong> {project.bank_name || '-'}</div>
                   <div><strong>Cuenta:</strong> {project.bank_account || '-'}</div>
                   <div><strong>CCI:</strong> {project.bank_cci || '-'}</div>
-                  <div style={{ margin: '4px 0', borderTop: '1px dashed var(--border-color)' }}></div>
-                  <div><strong>Predio:</strong> {project.predio_name || '-'}</div>
-                  <div><strong>UU.CC:</strong> {project.predio_uucc || '-'}</div>
-                  <div><strong>Área Predio:</strong> {project.predio_area || '-'}</div>
-                  <div><strong>Distrito Predio:</strong> {project.predio_district || '-'}</div>
-                  <div><strong>Partida:</strong> {project.predio_partida || '-'}</div>
-                  <div><strong>Zona Registral:</strong> {project.predio_zona_registral || '-'}</div>
                   <div><strong>Mora Diaria:</strong> S/. {project.late_penalty_rate || '1.50'}</div>
+                  <div style={{ margin: '4px 0', borderTop: '1px dashed var(--border-color)' }}></div>
+                  <div style={{ fontWeight: 'bold', color: 'var(--primary)', marginBottom: '2px' }}>Documentos del Proyecto:</div>
+                  <div>
+                    <strong>Copia Literal:</strong>{' '}
+                    {project.copia_literal_url ? (
+                      <a href={project.copia_literal_url} target="_blank" rel="noopener noreferrer" style={{ color: 'hsl(150, 80%, 70%)', textDecoration: 'underline' }}>
+                        Ver Archivo
+                      </a>
+                    ) : (
+                      <span style={{ color: 'var(--text-muted)' }}>No subido</span>
+                    )}
+                  </div>
+                  <div>
+                    <strong>Vencimiento Copia Literal:</strong> {project.copia_literal_expiry_date || '-'}
+                  </div>
+                  <div>
+                    <strong>DNI Titular (2 Caras):</strong>{' '}
+                    {project.dni_titular_url ? (
+                      <a href={project.dni_titular_url} target="_blank" rel="noopener noreferrer" style={{ color: 'hsl(150, 80%, 70%)', textDecoration: 'underline' }}>
+                        Ver DNI
+                      </a>
+                    ) : (
+                      <span style={{ color: 'var(--text-muted)' }}>No subido</span>
+                    )}
+                  </div>
+                  <div>
+                    <strong>Carta Poder:</strong>{' '}
+                    {project.carta_poder_url ? (
+                      <a href={project.carta_poder_url} target="_blank" rel="noopener noreferrer" style={{ color: 'hsl(150, 80%, 70%)', textDecoration: 'underline' }}>
+                        Ver Carta Poder
+                      </a>
+                    ) : (
+                      <span style={{ color: 'var(--text-muted)' }}>No requerida</span>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -443,34 +568,75 @@ export default function ProjectsView({ supabase, session, onRefreshData, current
                 </div>
               </div>
 
-              <h4 style={{ margin: '8px 0 4px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px', color: 'var(--primary)' }}>Detalles del Predio Matriz</h4>
+              <h4 style={{ margin: '8px 0 4px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px', color: 'var(--primary)' }}>Documentación de Respaldo</h4>
+              
               <div className="form-group">
-                <label>NOMBRE DEL PREDIO</label>
-                <input type="text" value={predioName} onChange={(e) => setPredioName(e.target.value)} placeholder="PREDIO FINCA NATALIA SECTOR CASHIBO COCHA" />
+                <label>COPIA LITERAL (PDF/Imagen) {!editingProject && '*'}</label>
+                <input 
+                  type="file" 
+                  accept="image/*,application/pdf" 
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) setCopiaLiteralFile(e.target.files[0]);
+                  }} 
+                  required={!editingProject}
+                />
+                {editingProject && copiaLiteralUrl && (
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    Archivo actual:{' '}
+                    <a href={copiaLiteralUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+                      Ver documento
+                    </a>
+                  </span>
+                )}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label>UU.CC.</label>
-                  <input type="text" value={predioUucc} onChange={(e) => setPredioUucc(e.target.value)} placeholder="037936" />
-                </div>
-                <div className="form-group">
-                  <label>ÁREA TOTAL PREDIO</label>
-                  <input type="text" value={predioArea} onChange={(e) => setPredioArea(e.target.value)} placeholder="Ha. 8.2544 HA" />
-                </div>
-                <div className="form-group">
-                  <label>DISTRITO PREDIO</label>
-                  <input type="text" value={predioDistrict} onChange={(e) => setPredioDistrict(e.target.value)} placeholder="Yarinacocha" />
-                </div>
+
+              <div className="form-group">
+                <label>FECHA VENCIMIENTO COPIA LITERAL {!editingProject && '*'}</label>
+                <input 
+                  type="date" 
+                  value={copiaLiteralExpiryDate} 
+                  onChange={(e) => setCopiaLiteralExpiryDate(e.target.value)} 
+                  required={!editingProject}
+                />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label>PARTIDA REGISTRAL</label>
-                  <input type="text" value={predioPartida} onChange={(e) => setPredioPartida(e.target.value)} placeholder="11139962" />
-                </div>
-                <div className="form-group">
-                  <label>ZONA REGISTRAL</label>
-                  <input type="text" value={predioZonaRegistral} onChange={(e) => setPredioZonaRegistral(e.target.value)} placeholder="Zona Registral N.º VI Sede Pucallpa" />
-                </div>
+
+              <div className="form-group">
+                <label>DNI TITULAR (Ambas Caras, PDF/Imagen) {!editingProject && '*'}</label>
+                <input 
+                  type="file" 
+                  accept="image/*,application/pdf" 
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) setDniTitularFile(e.target.files[0]);
+                  }} 
+                  required={!editingProject}
+                />
+                {editingProject && dniTitularUrl && (
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    DNI actual:{' '}
+                    <a href={dniTitularUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+                      Ver DNI
+                    </a>
+                  </span>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label>CARTA PODER (Opcional, PDF/Imagen)</label>
+                <input 
+                  type="file" 
+                  accept="image/*,application/pdf" 
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) setCartaPoderFile(e.target.files[0]);
+                  }} 
+                />
+                {editingProject && cartaPoderUrl && (
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    Carta Poder actual:{' '}
+                    <a href={cartaPoderUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+                      Ver Carta Poder
+                    </a>
+                  </span>
+                )}
               </div>
 
               <h4 style={{ margin: '8px 0 4px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px', color: 'var(--primary)' }}>Condiciones y Mora</h4>

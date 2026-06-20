@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { logActivity } from '../utils/activityLogger';
 
-export default function ClientesView({ clients, onAddClient }) {
-  const [showAddForm, setShowAddForm] = useState(false);
+export default function ClientesView({ supabase, session, clients, onRefreshData }) {
+  const [showModal, setShowModal] = useState(false);
+  const [editingClient, setEditingClient] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  
+  const [loading, setLoading] = useState(false);
+
   // Form fields
   const [dni, setDni] = useState('');
   const [names, setNames] = useState('');
@@ -14,58 +17,166 @@ export default function ClientesView({ clients, onAddClient }) {
   const [province, setProvince] = useState('CORONEL PORTILLO');
   const [district, setDistrict] = useState('CALLERIA');
   const [obs, setObs] = useState('');
-  
-  // DNI Files thumbnails
-  const [dniFront, setDniFront] = useState(null);
-  const [dniBack, setDniBack] = useState(null);
 
-  const handleSubmit = (e) => {
+  // DNI Files
+  const [dniFrontFile, setDniFrontFile] = useState(null);
+  const [dniBackFile, setDniBackFile] = useState(null);
+  const [dniFrontUrl, setDniFrontUrl] = useState('');
+  const [dniBackUrl, setDniBackUrl] = useState('');
+
+  const handleOpenCreate = () => {
+    setEditingClient(null);
+    setDni('');
+    setNames('');
+    setPhone('');
+    setAddress('');
+    setCivilStatus('SOLTERO');
+    setDepartment('UCAYALI');
+    setProvince('CORONEL PORTILLO');
+    setDistrict('CALLERIA');
+    setObs('');
+    setDniFrontFile(null);
+    setDniBackFile(null);
+    setDniFrontUrl('');
+    setDniBackUrl('');
+    setShowModal(true);
+  };
+
+  const handleOpenEdit = (client) => {
+    setEditingClient(client);
+    setDni(client.dni);
+    setNames(client.names);
+    setPhone(client.phone || '');
+    setAddress(client.address || '');
+    setCivilStatus(client.civil_status || 'SOLTERO');
+    setDepartment(client.department || 'UCAYALI');
+    setProvince(client.province || 'CORONEL PORTILLO');
+    setDistrict(client.district || 'CALLERIA');
+    setObs(client.observation || '');
+    setDniFrontFile(null);
+    setDniBackFile(null);
+    setDniFrontUrl(client.dni_front_url || '');
+    setDniBackUrl(client.dni_back_url || '');
+    setShowModal(true);
+  };
+
+  const handleDniFrontChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setDniFrontFile(e.target.files[0]);
+    }
+  };
+
+  const handleDniBackChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setDniBackFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!dni || !names) {
       alert("Por favor, complete DNI y Nombres.");
       return;
     }
 
-    const newClient = {
-      id: `cli-${dni}`,
-      dni,
-      names,
-      phone,
-      address,
-      civil_status: civilStatus,
-      department,
-      province,
-      district,
-      observation: obs,
-      dni_front_url: dniFront ? `file:///mock-storage/${dniFront}` : null,
-      dni_back_url: dniBack ? `file:///mock-storage/${dniBack}` : null
-    };
+    setLoading(true);
 
-    if (onAddClient) {
-      onAddClient(newClient);
-    }
+    try {
+      let finalFrontUrl = dniFrontUrl;
+      let finalBackUrl = dniBackUrl;
 
-    // Reset form
-    setDni('');
-    setNames('');
-    setPhone('');
-    setAddress('');
-    setCivilStatus('SOLTERO');
-    setObs('');
-    setDniFront(null);
-    setDniBack(null);
-    setShowAddForm(false);
-  };
+      // Upload DNI Front
+      if (dniFrontFile) {
+        const fileExt = dniFrontFile.name.split('.').pop();
+        const fileName = `${dni}_front_${Date.now()}.${fileExt}`;
+        const filePath = `clients/${dni}/${fileName}`;
 
-  const handleDniFrontChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setDniFront(e.target.files[0].name);
-    }
-  };
+        const { error: uploadError } = await supabase.storage
+          .from('urbis-files')
+          .upload(filePath, dniFrontFile);
 
-  const handleDniBackChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setDniBack(e.target.files[0].name);
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage.from('urbis-files').getPublicUrl(filePath);
+        finalFrontUrl = data.publicUrl;
+      }
+
+      // Upload DNI Back
+      if (dniBackFile) {
+        const fileExt = dniBackFile.name.split('.').pop();
+        const fileName = `${dni}_back_${Date.now()}.${fileExt}`;
+        const filePath = `clients/${dni}/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('urbis-files')
+          .upload(filePath, dniBackFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage.from('urbis-files').getPublicUrl(filePath);
+        finalBackUrl = data.publicUrl;
+      }
+
+      const clientData = {
+        dni,
+        names,
+        phone,
+        address,
+        civil_status: civilStatus,
+        department,
+        province,
+        district,
+        observation: obs,
+        dni_front_url: finalFrontUrl,
+        dni_back_url: finalBackUrl
+      };
+
+      if (editingClient) {
+        // Edit Client
+        const { error } = await supabase
+          .from('clients')
+          .update(clientData)
+          .eq('dni', editingClient.dni);
+
+        if (error) throw error;
+
+        await logActivity(supabase, {
+          userId: session.user.id,
+          userEmail: session.user.email,
+          action: 'editar_cliente',
+          entityType: 'client',
+          entityId: dni,
+          details: `Cliente '${names}' (${dni}) editado.`,
+        });
+
+        alert("Cliente actualizado con éxito.");
+      } else {
+        // Create Client
+        const { error } = await supabase
+          .from('clients')
+          .insert(clientData);
+
+        if (error) throw error;
+
+        await logActivity(supabase, {
+          userId: session.user.id,
+          userEmail: session.user.email,
+          action: 'crear_cliente',
+          entityType: 'client',
+          entityId: dni,
+          details: `Cliente '${names}' (${dni}) registrado.`,
+        });
+
+        alert("Cliente registrado con éxito.");
+      }
+
+      setShowModal(false);
+      if (onRefreshData) onRefreshData();
+    } catch (err) {
+      console.error(err);
+      alert("Error al guardar cliente: " + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,7 +193,7 @@ export default function ClientesView({ clients, onAddClient }) {
           <h1 style={{ margin: 0, fontSize: '2rem' }}>Directorio de Clientes</h1>
           <p style={{ color: 'var(--text-muted)', margin: '4px 0 0 0' }}>Gestión de datos de compradores e imágenes de DNIs</p>
         </div>
-        <button className="btn-primary" onClick={() => setShowAddForm(true)}>
+        <button className="btn-primary" onClick={handleOpenCreate}>
           + Registrar Nuevo Cliente
         </button>
       </div>
@@ -101,16 +212,16 @@ export default function ClientesView({ clients, onAddClient }) {
         </div>
       </div>
 
-      {/* Register Client Modal Form */}
-      {showAddForm && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100 }}>
+      {/* Modal Form */}
+      {showModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100, backdropFilter: 'blur(4px)' }}>
           <div className="glass-panel" style={{ width: '550px', padding: '32px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h2 style={{ margin: '0 0 20px 0', fontFamily: 'Outfit' }}>Registrar Nuevo Cliente</h2>
+            <h2 style={{ margin: '0 0 20px 0', fontFamily: 'Outfit' }}>{editingClient ? 'Editar Cliente' : 'Registrar Nuevo Cliente'}</h2>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div className="form-group">
-                  <label>DOCUMENTO DE IDENTIDAD (DNI)</label>
-                  <input type="text" maxLength={15} value={dni} onChange={(e) => setDni(e.target.value)} required />
+                  <label>DOCUMENTO DE IDENTIDAD (DNI) *</label>
+                  <input type="text" maxLength={15} value={dni} onChange={(e) => setDni(e.target.value)} required disabled={!!editingClient} />
                 </div>
                 <div className="form-group">
                   <label>CELULAR</label>
@@ -119,7 +230,7 @@ export default function ClientesView({ clients, onAddClient }) {
               </div>
 
               <div className="form-group">
-                <label>NOMBRES COMPLETOS</label>
+                <label>NOMBRES COMPLETOS *</label>
                 <input type="text" value={names} onChange={(e) => setNames(e.target.value)} required />
               </div>
 
@@ -143,7 +254,7 @@ export default function ClientesView({ clients, onAddClient }) {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
                 <div className="form-group">
                   <label>ESTADO CIVIL</label>
                   <select value={civilStatus} onChange={(e) => setCivilStatus(e.target.value)}>
@@ -161,14 +272,16 @@ export default function ClientesView({ clients, onAddClient }) {
                   <label style={{ fontSize: '0.75rem', display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontWeight: '600' }}>DNI ANVERSO (FRENTE)</label>
                   <input type="file" id="dni-front-file" accept="image/*" onChange={handleDniFrontChange} style={{ display: 'none' }} />
                   <label htmlFor="dni-front-file" className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.75rem', cursor: 'pointer' }}>Elegir Foto</label>
-                  {dniFront && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>{dniFront}</div>}
+                  {dniFrontFile && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>{dniFrontFile.name}</div>}
+                  {!dniFrontFile && dniFrontUrl && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>✓ Foto cargada</div>}
                 </div>
                 
                 <div style={{ textAlign: 'center' }}>
                   <label style={{ fontSize: '0.75rem', display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontWeight: '600' }}>DNI REVERSO (ATRÁS)</label>
                   <input type="file" id="dni-back-file" accept="image/*" onChange={handleDniBackChange} style={{ display: 'none' }} />
                   <label htmlFor="dni-back-file" className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.75rem', cursor: 'pointer' }}>Elegir Foto</label>
-                  {dniBack && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>{dniBack}</div>}
+                  {dniBackFile && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>{dniBackFile.name}</div>}
+                  {!dniBackFile && dniBackUrl && <div style={{ fontSize: '0.7rem', color: 'var(--primary)', marginTop: '6px' }}>✓ Foto cargada</div>}
                 </div>
               </div>
 
@@ -177,12 +290,12 @@ export default function ClientesView({ clients, onAddClient }) {
                 <textarea rows={2} value={obs} onChange={(e) => setObs(e.target.value)} />
               </div>
 
-              <div style={{ display: 'flex', justifyContext: 'flex-end', gap: '12px', marginTop: '10px' }}>
-                <button type="button" className="btn-secondary" onClick={() => setShowAddForm(false)} style={{ flexGrow: 1 }}>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)} style={{ flexGrow: 1 }} disabled={loading}>
                   Cancelar
                 </button>
-                <button type="submit" className="btn-primary" style={{ flexGrow: 1 }}>
-                  Guardar Cliente
+                <button type="submit" className="btn-primary" style={{ flexGrow: 1 }} disabled={loading}>
+                  {loading ? 'Guardando...' : editingClient ? 'Guardar Cambios' : 'Guardar Cliente'}
                 </button>
               </div>
             </form>
@@ -202,6 +315,7 @@ export default function ClientesView({ clients, onAddClient }) {
               <th>Distrito / Provincia</th>
               <th>Estado Civil</th>
               <th>Imágenes DNI</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -214,17 +328,27 @@ export default function ClientesView({ clients, onAddClient }) {
                 <td>{client.district ? `${client.district} / ${client.province}` : '-'}</td>
                 <td>{client.civil_status || '-'}</td>
                 <td>
-                  <div style={{ display: 'flex', gap: '6px' }}>
-                    {client.dni_front_url || client.dni_back_url ? (
-                      <span style={{ color: 'var(--primary)', fontSize: '0.75rem', fontWeight: '500' }}>
-                        ✓ DNI Cargado
-                      </span>
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    {client.dni_front_url ? (
+                      <a href={client.dni_front_url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontSize: '0.75rem', textDecoration: 'none' }}>
+                        👁️ Frente
+                      </a>
                     ) : (
-                      <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontStyle: 'italic' }}>
-                        Pendiente
-                      </span>
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontStyle: 'italic' }}>Sin Frente</span>
+                    )}
+                    {client.dni_back_url ? (
+                      <a href={client.dni_back_url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontSize: '0.75rem', textDecoration: 'none' }}>
+                        👁️ Reverso
+                      </a>
+                    ) : (
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontStyle: 'italic' }}>Sin Reverso</span>
                     )}
                   </div>
+                </td>
+                <td>
+                  <button className="btn-secondary" onClick={() => handleOpenEdit(client)} style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
+                    ✏️ Editar
+                  </button>
                 </td>
               </tr>
             ))}

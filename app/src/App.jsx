@@ -11,6 +11,9 @@ import ClientesView from './components/ClientesView';
 import IngresosForm from './components/IngresosForm';
 import ValidacionView from './components/ValidacionView';
 import GastosView from './components/GastosView';
+import ProjectsView from './components/ProjectsView';
+import CuentasView from './components/CuentasView';
+import ActivityLogView from './components/ActivityLogView';
 
 export default function App() {
   // ==========================================
@@ -23,6 +26,8 @@ export default function App() {
   // ==========================================
   // DATA STATE (starts empty, fetched from Supabase)
   // ==========================================
+  const [projects, setProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState(null);
   const [lots, setLots] = useState([]);
   const [clients, setClients] = useState([]);
   const [sales, setSales] = useState([]);
@@ -31,12 +36,17 @@ export default function App() {
   const [expenses, setExpenses] = useState([]);
   const [financialAccounts, setFinancialAccounts] = useState([]);
   const [dataLoading, setDataLoading] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // Navigation and Role
-  const [activeView, setActiveView] = useState('dashboard');
+  const [activeView, setActiveView] = useState('proyectos'); // Default to Proyectos CRUD
 
   // Derive role from profile (fallback to 'secretary')
   const currentRole = userProfile?.role || 'secretary';
+
+  const handleRefreshData = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   // ==========================================
   // AUTH LIFECYCLE
@@ -55,6 +65,8 @@ export default function App() {
         if (!newSession) {
           // Logged out — clear everything
           setUserProfile(null);
+          setProjects([]);
+          setSelectedProject(null);
           setLots([]);
           setClients([]);
           setSales([]);
@@ -106,6 +118,7 @@ export default function App() {
       setDataLoading(true);
 
       const [
+        projectsRes,
         lotsRes,
         clientsRes,
         salesRes,
@@ -114,14 +127,30 @@ export default function App() {
         expensesRes,
         accountsRes,
       ] = await Promise.all([
-        supabase.from('lots').select('*, projects(name)').order('lot_number'),
-        supabase.from('clients').select('*').order('full_name'),
-        supabase.from('sales').select('*').order('sale_date', { ascending: false }),
+        supabase.from('projects').select('*').order('name'),
+        supabase.from('lots').select('*').order('mz').order('lt'),
+        supabase.from('clients').select('*').order('names'),
+        supabase.from('sales').select('*').order('created_at', { ascending: false }),
         supabase.from('installments').select('*').order('installment_number'),
         supabase.from('daily_income').select('*').order('date', { ascending: false }),
         supabase.from('expenses').select('*').order('date', { ascending: false }),
         supabase.from('financial_accounts').select('*').order('name'),
       ]);
+
+      if (projectsRes.data) {
+        setProjects(projectsRes.data);
+        // Set selected project default if none selected or if not in projects list anymore
+        if (projectsRes.data.length > 0) {
+          setSelectedProject(prev => {
+            if (prev && projectsRes.data.find(p => p.id === prev.id)) {
+              return projectsRes.data.find(p => p.id === prev.id);
+            }
+            return projectsRes.data[0];
+          });
+        } else {
+          setSelectedProject(null);
+        }
+      }
 
       if (lotsRes.data) setLots(lotsRes.data);
       if (clientsRes.data) setClients(clientsRes.data);
@@ -135,160 +164,47 @@ export default function App() {
     };
 
     fetchAllData();
-  }, [session]);
+  }, [session, refreshTrigger]);
 
   // ==========================================
   // PENDING INCOMES COUNT
   // ==========================================
-  const pendingIncomesCount = dailyIncome.filter(inc => !inc.approved).length;
+  const pendingIncomesCount = dailyIncome.filter(inc => {
+    if (!selectedProject) return false;
+    const lot = lots.find(l => l.id === inc.lot_id);
+    return lot && lot.project_id === selectedProject.id && !inc.approved;
+  }).length;
 
-  // ==========================================
-  // TRANSACTION LOGIC ENGINE (INGRESOS DIARIOS)
-  // ==========================================
+  // Filtered lists to pass to project-specific components
+  const filteredLots = selectedProject
+    ? lots.filter(l => l.project_id === selectedProject.id)
+    : [];
 
-  // Approve a pending income and apply to database schema
-  const handleApproveIncome = (incomeId) => {
-    const income = dailyIncome.find(inc => inc.id === incomeId);
-    if (!income) return;
+  const filteredSales = selectedProject
+    ? sales.filter(s => {
+        const lot = lots.find(l => l.id === s.lot_id);
+        return lot && lot.project_id === selectedProject.id;
+      })
+    : [];
 
-    // A. Mark income as approved
-    const updatedIncome = dailyIncome.map(inc =>
-      inc.id === incomeId ? { ...inc, approved: true } : inc
-    );
+  const filteredInstallments = selectedProject
+    ? installments.filter(inst => {
+        const sale = sales.find(s => s.id === inst.sale_id);
+        const lot = sale ? lots.find(l => l.id === sale.lot_id) : null;
+        return lot && lot.project_id === selectedProject.id;
+      })
+    : [];
 
-    // B. Apply transaction side effects based on income type
-    let updatedLots = [...lots];
-    let updatedSales = [...sales];
-    let updatedInstallments = [...installments];
+  const filteredDailyIncome = selectedProject
+    ? dailyIncome.filter(inc => {
+        const lot = lots.find(l => l.id === inc.lot_id);
+        return lot && lot.project_id === selectedProject.id;
+      })
+    : [];
 
-    const lot = lots.find(l => l.id === income.lot_id);
-
-    if (income.income_type === 'separacion') {
-      updatedLots = lots.map(l =>
-        l.id === income.lot_id ? { ...l, status: 'separado' } : l
-      );
-    }
-    else if (income.income_type === 'inicial') {
-      updatedLots = lots.map(l =>
-        l.id === income.lot_id ? { ...l, status: 'vendido' } : l
-      );
-
-      let sale = sales.find(s => s.lot_id === income.lot_id);
-      if (!sale) {
-        const newSaleId = `sale-${income.lot_id}`;
-        const newSale = {
-          id: newSaleId,
-          lot_id: income.lot_id,
-          client_id: income.client_id,
-          total_sale_price: lot ? lot.total_price : 15000,
-          initial_amount_paid: income.amount,
-          installments_count: 48,
-          interest_rate: 0.0,
-          sale_date: income.date,
-          status: 'en_proceso'
-        };
-        updatedSales.push(newSale);
-
-        const monthlyAmount = lot ? ((lot.total_price - income.amount) / 48) : 300;
-        const startDate = new Date(income.date);
-
-        updatedInstallments.push({
-          id: `inst-${newSaleId}-0`,
-          sale_id: newSaleId,
-          installment_number: 0,
-          due_date: income.date,
-          amount: income.amount,
-          amount_paid: income.amount,
-          status: 'pagado'
-        });
-
-        for (let m = 1; m <= 48; m++) {
-          const dueDate = new Date(startDate.getFullYear(), startDate.getMonth() + m, 30);
-          updatedInstallments.push({
-            id: `inst-${newSaleId}-${m}`,
-            sale_id: newSaleId,
-            installment_number: m,
-            due_date: dueDate.toISOString().split('T')[0],
-            amount: parseFloat(monthlyAmount.toFixed(2)),
-            amount_paid: 0.00,
-            status: 'pendiente'
-          });
-        }
-      } else {
-        updatedInstallments = installments.map(inst => {
-          if (inst.sale_id === sale.id && inst.installment_number === 0) {
-            const newPaid = inst.amount_paid + income.amount;
-            return {
-              ...inst,
-              amount_paid: newPaid,
-              status: newPaid >= inst.amount ? 'pagado' : 'pendiente'
-            };
-          }
-          return inst;
-        });
-      }
-    }
-    else if (income.income_type === 'cuota') {
-      const sale = sales.find(s => s.lot_id === income.lot_id);
-      if (sale) {
-        let paymentLeft = income.amount;
-
-        updatedInstallments = updatedInstallments.map(inst => {
-          if (inst.sale_id === sale.id && paymentLeft > 0 && inst.status !== 'pagado') {
-            const outstanding = inst.amount - inst.amount_paid;
-            if (paymentLeft >= outstanding) {
-              paymentLeft -= outstanding;
-              return {
-                ...inst,
-                amount_paid: inst.amount,
-                status: 'pagado'
-              };
-            } else {
-              const newPaid = inst.amount_paid + paymentLeft;
-              paymentLeft = 0;
-              return {
-                ...inst,
-                amount_paid: parseFloat(newPaid.toFixed(2)),
-                status: 'pendiente'
-              };
-            }
-          }
-          return inst;
-        });
-      }
-    }
-
-    setLots(updatedLots);
-    setSales(updatedSales);
-    setInstallments(updatedInstallments);
-    setDailyIncome(updatedIncome);
-  };
-
-  // Reject a pending income
-  const handleRejectIncome = (incomeId) => {
-    setDailyIncome(dailyIncome.filter(inc => inc.id !== incomeId));
-    alert("El voucher ha sido rechazado y removido de la bandeja de validación.");
-  };
-
-  // Add new client
-  const handleAddClient = (client) => {
-    setClients([client, ...clients]);
-  };
-
-  // Update sale
-  const handleUpdateSale = (updatedSale) => {
-    setSales(sales.map(s => s.id === updatedSale.id ? updatedSale : s));
-  };
-
-  // Add a pending income
-  const handleAddIncome = (income) => {
-    setDailyIncome([income, ...dailyIncome]);
-  };
-
-  // Add new expense
-  const handleAddExpense = (expense) => {
-    setExpenses([expense, ...expenses]);
-  };
+  const filteredExpenses = selectedProject
+    ? expenses.filter(exp => exp.project_id === selectedProject.id)
+    : [];
 
   // Logout
   const handleLogout = async () => {
@@ -334,7 +250,7 @@ export default function App() {
 
       {/* Navigation Sidebar */}
       <div className="sidebar">
-        <div style={{ marginBottom: '32px', textAlign: 'center' }}>
+        <div style={{ marginBottom: '24px', textAlign: 'center' }}>
           <div style={{ fontFamily: 'Outfit', fontWeight: '800', fontSize: '1.4rem', color: 'var(--primary)', letterSpacing: '-0.03em' }}>
             URBIS CONTROL
           </div>
@@ -343,8 +259,35 @@ export default function App() {
           </span>
         </div>
 
+        {/* Project Selector */}
+        {projects.length > 0 && (
+          <div style={{ marginBottom: '24px', padding: '0 4px' }}>
+            <label style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '700', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>PROYECTO ACTIVO</label>
+            <select
+              value={selectedProject?.id || ''}
+              onChange={(e) => {
+                const proj = projects.find(p => p.id === e.target.value);
+                setSelectedProject(proj || null);
+              }}
+              style={{ width: '100%', padding: '10px', fontSize: '0.85rem', borderRadius: '8px', background: 'var(--bg-main)', border: '1px solid var(--border-color)', color: 'var(--text-main)', cursor: 'pointer' }}
+            >
+              {projects.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
         {/* Navigation links */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flexGrow: 1 }}>
+          <button
+            className={`btn-secondary ${activeView === 'proyectos' ? 'active-nav' : ''}`}
+            onClick={() => setActiveView('proyectos')}
+            style={{ justifyContent: 'flex-start' }}
+          >
+            🏢 Proyectos
+          </button>
+
           <button
             className={`btn-secondary ${activeView === 'dashboard' ? 'active-nav' : ''}`}
             onClick={() => setActiveView('dashboard')}
@@ -406,6 +349,25 @@ export default function App() {
           >
             💸 Gastos Generales
           </button>
+
+          <button
+            className={`btn-secondary ${activeView === 'cuentas' ? 'active-nav' : ''}`}
+            onClick={() => setActiveView('cuentas')}
+            style={{ justifyContent: 'flex-start' }}
+          >
+            💳 Cuentas Bancarias
+          </button>
+
+          {/* Admin only log view */}
+          {currentRole === 'admin' && (
+            <button
+              className={`btn-secondary ${activeView === 'actividades' ? 'active-nav' : ''}`}
+              onClick={() => setActiveView('actividades')}
+              style={{ justifyContent: 'flex-start' }}
+            >
+              📋 Bitácora Actividades
+            </button>
+          )}
         </div>
 
         {/* User info & Logout */}
@@ -431,59 +393,92 @@ export default function App() {
       {/* Main Content Area */}
       <div className="main-content">
 
+        {activeView === 'proyectos' && (
+          <ProjectsView
+            supabase={supabase}
+            session={session}
+            onRefreshData={handleRefreshData}
+          />
+        )}
+
         {activeView === 'dashboard' && (
           <Dashboard
-            lots={lots}
-            sales={sales}
-            installments={installments}
-            dailyIncome={dailyIncome}
-            expenses={expenses}
+            lots={filteredLots}
+            sales={filteredSales}
+            installments={filteredInstallments}
+            dailyIncome={filteredDailyIncome}
+            expenses={filteredExpenses}
           />
         )}
 
         {activeView === 'lotes' && (
           <LotesView
+            supabase={supabase}
+            session={session}
+            selectedProject={selectedProject}
             lots={lots}
             clients={clients}
             sales={sales}
             installments={installments}
             dailyIncome={dailyIncome}
-            onUpdateSale={handleUpdateSale}
+            onRefreshData={handleRefreshData}
           />
         )}
 
         {activeView === 'clientes' && (
           <ClientesView
+            supabase={supabase}
+            session={session}
             clients={clients}
-            onAddClient={handleAddClient}
+            onRefreshData={handleRefreshData}
           />
         )}
 
         {activeView === 'ingresos' && currentRole !== 'manager' && (
           <IngresosForm
+            supabase={supabase}
+            session={session}
+            selectedProject={selectedProject}
             lots={lots}
             clients={clients}
-            sales={sales}
             financialAccounts={financialAccounts}
-            onAddIncome={handleAddIncome}
+            onRefreshData={handleRefreshData}
           />
         )}
 
         {activeView === 'validacion' && currentRole === 'admin' && (
           <ValidacionView
+            supabase={supabase}
+            session={session}
             dailyIncome={dailyIncome}
             lots={lots}
             clients={clients}
             financialAccounts={financialAccounts}
-            onApprove={handleApproveIncome}
-            onReject={handleRejectIncome}
+            onRefreshData={handleRefreshData}
           />
         )}
 
         {activeView === 'gastos' && (
           <GastosView
+            supabase={supabase}
+            session={session}
+            selectedProject={selectedProject}
             expenses={expenses}
-            onAddExpense={handleAddExpense}
+            onRefreshData={handleRefreshData}
+          />
+        )}
+
+        {activeView === 'cuentas' && (
+          <CuentasView
+            supabase={supabase}
+            session={session}
+            selectedProject={selectedProject}
+          />
+        )}
+
+        {activeView === 'actividades' && currentRole === 'admin' && (
+          <ActivityLogView
+            supabase={supabase}
           />
         )}
 
